@@ -1,0 +1,13 @@
+
+version: "2"
+services:
+  mysql:
+    image: mysql:8.0.20
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment: 
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: attsw
+        MYSQL_PASSWORD: attsw
+        MYSQL_DATABASE: teammates-manager
+    ports:
+      - 3306:3306

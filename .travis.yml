@@ -1,0 +1,32 @@
+language: java
+
+dist: xenial
+
+jdk: openjdk8
+
+git:
+  depth: false
+
+addons:
+  sonarcloud:
+    organization: polste
+
+services: docker
+
+install: true
+
+cache:
+  directories:
+    - $HOME/.m2
+
+deploy:
+  provider: script
+  script:  "./mvnw clean heroku:deploy"
+  api_key: $HEROKU_API_KEY
+  on:
+    branch: master
+
+script:
+  - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-tests && ./mvnw coveralls:report sonar:sonar
+
+
