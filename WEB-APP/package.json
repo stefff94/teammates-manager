@@ -1,0 +1,98 @@
+{
+  "name": "teammates-manager-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit WEB-APP/tests/unit/*",
+    "test:unit-watch": "vue-cli-service test:unit WEB-APP/tests/unit/* --watch",
+    "test:it": "vue-cli-service test:unit WEB-APP/tests/it/*",
+    "test:it-watch": "vue-cli-service test:unit WEB-APP/tests/it/* --watch",
+    "test:coverage": "vue-cli-service test:unit --coverage",
+    "test:e2e-detached": "vue-cli-service test:e2e --headless",
+    "test:e2e-attached": "vue-cli-service test:e2e",
+    "test:all": "vue-cli-service test:unit && vue-cli-service test:e2e --headless",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "core-js": "^3.6.4",
+    "flush-promises": "^1.0.2",
+    "fomantic-ui": "^2.8.6",
+    "jquery": "^3.5.1",
+    "vue": "^2.6.11",
+    "vue-multiselect": "^2.1.6"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.6",
+    "@vue/cli-plugin-e2e-cypress": "~4.4.6",
+    "@vue/cli-plugin-eslint": "~4.4.6",
+    "@vue/cli-plugin-unit-jest": "~4.4.6",
+    "@vue/cli-service": "~4.4.6",
+    "@vue/test-utils": "1.0.3",
+    "babel-eslint": "^10.1.0",
+    "@cypress/webpack-preprocessor": "^5.1.2",
+    "cypress-cucumber-preprocessor": "^2.3.1",
+    "coveralls": "^3.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.11",
+    "jest-sonar-reporter": "^2.0.0"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "tests/e2e/specs",
+    "commonPath": "tests/e2e/common",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "tests/e2e/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
+    }
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)",
+          "**/tests/it/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "jest": {
+    "preset": "@vue/cli-plugin-unit-jest",
+    "testMatch": [
+      "**/tests/unit/**/*.spec.[jt]s?(x)",
+      "**/__tests__/*.[jt]s?(x)",
+      "**/tests/it/**/*.spec.[jt]s?(x)"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/src/**/*.vue"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  }
+}

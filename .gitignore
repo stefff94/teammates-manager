@@ -1,0 +1,30 @@
+.DS_Store
+node_modules
+/dist
+
+/WEB-APP/tests/e2e/videos/
+/WEB-APP/tests/e2e/screenshots/
+/WEB-APP/tests/e2e/cucumber-json/
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+/coverage
+/semantic
+
+test-report.xml

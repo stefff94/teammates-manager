@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - 12
+addons:
+  sonarcloud:
+    organization: "polste"
+cache:
+  directories:
+    - node_modules
+    - semantic
+script:
+  - npm run test:all
+after_script:
+  - cat ./coverage/lcov.info | coveralls
+  - sonar-scanner
