@@ -27,12 +27,7 @@
     export default {
         name: "CardFront",
         props: {
-            data: {
-                type:Object,
-                default: {
-                    photoUrl: ''
-                }
-            }
+            data: Object
         }
     }
 </script>

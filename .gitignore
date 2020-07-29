@@ -30,11 +30,14 @@ build/
 ### VS Code ###
 .DS_Store
 node_modules
-/dist
+dist
 
-/WEB-APP/tests/e2e/videos/
-/WEB-APP/tests/e2e/screenshots/
-/WEB-APP/tests/e2e/cucumber-json/
+### Frontend ###
+/src/main/resources/public
+/src/main/WEB-APP/semantic
+/src/main/WEB-APP/tests/e2e/videos/
+/src/main/WEB-APP/tests/e2e/screenshots/
+/src/main/WEB-APP/tests/e2e/cucumber-json/
 
 # local env files
 .env.local
