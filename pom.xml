@@ -337,9 +337,6 @@
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
-					<configuration>
-						<repoToken>ZwRLlo9rjq4plbkg1UVmjrjzBJBSkDIsZ</repoToken>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
