@@ -80,7 +80,7 @@
         mounted() {
             this.resetSelects();
             this.getSkillsAndUpdateView();
-            this.getAllTeammatesAndUpdateView()
+            this.getAllTeammatesAndUpdateView();
         },
         computed: {
             submitDisabled() {

@@ -31,11 +31,8 @@ let paolo = {
 };
 
 Before({ tags: "@initializeDB" }, async () => {
-    ApiService.insertTeammate(stefano).then(response =>
-        stefano.id = response.data.id);
-
-    ApiService.insertTeammate(paolo).then(response =>
-        paolo.id = response.data.id);
+    ApiService.insertTeammate(stefano).then(response => stefano.id = response.data.id);
+    ApiService.insertTeammate(paolo).then(response => paolo.id = response.data.id);
 });
 
 When(`I visit the app root page`, () => {

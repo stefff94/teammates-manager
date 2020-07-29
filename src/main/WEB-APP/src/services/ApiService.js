@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const backendBaseUrl = "http://teammates-manager-backend.herokuapp.com/api";
+// const backendBaseUrl = process.env.VUE_APP_BACKEND_IP + ':' +
+//     process.env.VUE_APP_BACKEND_PORT + "/api";
+const backendBaseUrl = 'http://localhost:8080/api';
 
 class ApiService {
 

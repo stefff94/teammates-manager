@@ -39,20 +39,25 @@
 		</sonar.junit.reportPaths>
 		<sonar.sources>
 			pom.xml,
-			${project.build.sourceDirectory}
+			${project.build.sourceDirectory},
+			src/main/WEB-APP/src
 		</sonar.sources>
 		<sonar.tests>
 			${project.build.testSourceDirectory},
 			${basedir}/src/it/java,
-			${basedir}/src/e2e/java
+			${basedir}/src/e2e/java,
+			${basedir}/src/main/WEB-APP/tests/unit,
+			${basedir}/src/main/WEB-APP/tests/it,
 		</sonar.tests>
 		<sonar.coverage.exclusions>
 			**/*Application.*,
 			**/*Config.*,
 			**/models/*,
-			**/repositories/*
+			**/repositories/*,
+			**/ApiService.js,
+			**/main.js
 		</sonar.coverage.exclusions>
-		<sonar.issue.ignore.multicriteria>e11,e12, e13</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria>e11,e12,e13,randomImageSH,iTagForIcons</sonar.issue.ignore.multicriteria>
 		<!-- "Tests should include assertions" disabled for default Spring test -->
 		<sonar.issue.ignore.multicriteria.e11.ruleKey>
 			java:S2699
@@ -76,6 +81,18 @@
 		<sonar.issue.ignore.multicriteria.e13.resourceKey>
 			**/WebConfig.java
 		</sonar.issue.ignore.multicriteria.e13.resourceKey>
+		<sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
+			javascript:S2245
+		</sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
+		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
+			src/main/WEB-APP/App.vue
+		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
+		<sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
+			Web:BoldAndItalicTagsCheck
+		</sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
+		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
+			src/main/WEB-APP/src/**/*.vue
+		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
 	</properties>
 
 	<dependencies>
@@ -320,6 +337,9 @@
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
+					<configuration>
+						<repoToken>ZwRLlo9rjq4plbkg1UVmjrjzBJBSkDIsZ</repoToken>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
@@ -419,7 +439,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>e2e-tests</id>
+			<id>e2e-backend-tests</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -429,24 +449,6 @@
 			</properties>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>reserve-tomcat-port</id>
-								<goals>
-									<goal>reserve-network-port</goal>
-								</goals>
-								<phase>process-resources</phase>
-								<configuration>
-									<portNames>
-										<portName>tomcat.http.port</portName>
-									</portNames>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-maven-plugin</artifactId>
@@ -459,7 +461,7 @@
 								<configuration>
 									<arguments>
 										<!--suppress UnresolvedMavenProperty -->
-										<argument>--server.port=${tomcat.http.port}</argument>
+										<argument>--server.port=8080</argument>
 									</arguments>
 								</configuration>
 							</execution>
@@ -491,9 +493,78 @@
 						<configuration>
 							<systemPropertyVariables>
 								<!--suppress UnresolvedMavenProperty -->
-								<server.port>${tomcat.http.port}</server.port>
+								<server.port>8080</server.port>
 							</systemPropertyVariables>
 						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>test-frontend</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<skip.unit-tests>true</skip.unit-tests>
+				<skip.integration-tests>true</skip.integration-tests>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>pre-integration-test</id>
+								<goals>
+									<goal>start</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>post-integration-test</id>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>${frontend-maven-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>npm run test:unit</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>integration-test</phase>
+								<configuration>
+									<arguments>run test:unit</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm run test:it</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>test</phase>
+								<configuration>
+									<arguments>run test:it</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm run test:e2e</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>integration-test</phase>
+								<configuration>
+									<arguments>run test:e2e-detached</arguments>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
