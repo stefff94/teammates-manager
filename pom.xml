@@ -57,7 +57,7 @@
 			**/tests/it/*.spec.js
 		</sonar.test.inclusions>
 		<sonar.exclusions>
-			${basedir}/src/main/WEB-APP/src/variables.js
+			**/variables.js
 		</sonar.exclusions>
 		<sonar.coverage.exclusions>
 			**/*Application.*,
