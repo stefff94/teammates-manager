@@ -34,7 +34,7 @@
 			${project.reporting.outputDirectory}/jacoco/jacoco.xml
 		</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.javascript.lcov.reportPaths>
-			${basedir}/src/main/WEB-APP/coverage/lcov.info
+			**/coverage/lcov.info
 		</sonar.javascript.lcov.reportPaths>
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports,
@@ -43,14 +43,14 @@
 		<sonar.sources>
 			pom.xml,
 			${project.build.sourceDirectory},
-			${basedir}/src/main/WEB-APP/src
+			**/WEB-APP/src
 		</sonar.sources>
 		<sonar.tests>
 			${project.build.testSourceDirectory},
 			${basedir}/src/it/java,
 			${basedir}/src/e2e/java,
-			${basedir}/src/main/WEB-APP/tests/unit,
-			${basedir}/src/main/WEB-APP/tests/it,
+			**/WEB-APP/tests/unit,
+			**/WEB-APP/tests/it,
 		</sonar.tests>
 		<sonar.test.inclusions>
 			**/tests/unit/**/*.spec.js,
