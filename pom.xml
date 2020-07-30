@@ -81,18 +81,18 @@
 		<sonar.issue.ignore.multicriteria.e13.resourceKey>
 			**/WebConfig.java
 		</sonar.issue.ignore.multicriteria.e13.resourceKey>
-<!--		<sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>-->
-<!--			javascript:S2245-->
-<!--		</sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>-->
-<!--		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>-->
-<!--			${basedir}/src/main/WEB-APP/src/App.vue-->
-<!--		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>-->
-<!--		<sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>-->
-<!--			Web:BoldAndItalicTagsCheck-->
-<!--		</sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>-->
-<!--		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>-->
-<!--			${basedir}/src/main/WEB-APP/src/**/*.vue-->
-<!--		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>-->
+		<sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
+			javascript:S2245
+		</sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
+		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
+			${basedir}/src/main/WEB-APP/src/App.vue
+		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
+		<sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
+			Web:BoldAndItalicTagsCheck
+		</sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
+		<sonar.issue.ignore.multicriteria.iTagForIcons.resourceKey>
+			**/*.vue
+		</sonar.issue.ignore.multicriteria.iTagForIcons.resourceKey>
 	</properties>
 
 	<dependencies>
