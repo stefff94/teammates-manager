@@ -40,7 +40,7 @@
 		<sonar.sources>
 			pom.xml,
 			${project.build.sourceDirectory},
-			src/main/WEB-APP/src
+			${basedir}/src/main/WEB-APP/src
 		</sonar.sources>
 		<sonar.tests>
 			${project.build.testSourceDirectory},
@@ -274,7 +274,6 @@
 					<installDirectory>target</installDirectory>
 				</configuration>
 				<executions>
-					<!-- Install our node and npm version to run npm/node scripts-->
 					<execution>
 						<id>install node and npm</id>
 						<goals>
@@ -284,27 +283,14 @@
 							<nodeVersion>${node.version}</nodeVersion>
 						</configuration>
 					</execution>
-					<!-- Install all project dependencies -->
 					<execution>
 						<id>npm install</id>
 						<goals>
 							<goal>npm</goal>
 						</goals>
-						<!-- optional: default phase is "generate-resources" -->
 						<phase>generate-resources</phase>
-						<!-- Optional configuration which provides for running any npm command -->
 						<configuration>
 							<arguments>install</arguments>
-						</configuration>
-					</execution>
-					<!-- Build and minify static files -->
-					<execution>
-						<id>npm run build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>run build</arguments>
 						</configuration>
 					</execution>
 				</executions>
