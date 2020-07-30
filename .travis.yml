@@ -20,13 +20,6 @@ cache:
     - $HOME/.m2
     - src/main/WEB-APP/semantic
 
-deploy:
-  provider: script
-  script:  "./mvnw clean heroku:deploy"
-  api_key: $HEROKU_API_KEY
-  on:
-    branch: master
-
 script:
   - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -P test-frontend  && ./mvnw coveralls:report sonar:sonar
 

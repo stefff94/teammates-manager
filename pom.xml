@@ -52,6 +52,10 @@
 			${basedir}/src/main/WEB-APP/tests/unit,
 			${basedir}/src/main/WEB-APP/tests/it,
 		</sonar.tests>
+		<sonar.test.inclusions>
+			**/tests/unit/**/*.spec.js,
+			**/tests/it/*.spec.js
+		</sonar.test.inclusions>
 		<sonar.exclusions>
 			${basedir}/src/main/WEB-APP/src/variables.js
 		</sonar.exclusions>
@@ -87,11 +91,12 @@
 		<sonar.issue.ignore.multicriteria.e13.resourceKey>
 			**/WebConfig.java
 		</sonar.issue.ignore.multicriteria.e13.resourceKey>
+		<!-- "Make sure that using this pseudorandom number generator is safe here." -->
 		<sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
 			javascript:S2245
 		</sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
 		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
-			${basedir}/src/main/WEB-APP/src/App.vue
+			**/App.vue
 		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
 		<sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
 			Web:BoldAndItalicTagsCheck
