@@ -535,23 +535,13 @@
 						<version>${frontend-maven-plugin.version}</version>
 						<executions>
 							<execution>
-								<id>npm run test:unit</id>
+								<id>npm run test:unit-it</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
 								<phase>test</phase>
 								<configuration>
-									<arguments>run test:unit</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm run test:it</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<phase>integration-test</phase>
-								<configuration>
-									<arguments>run test:it</arguments>
+									<arguments>run test:unit-it</arguments>
 								</configuration>
 							</execution>
 							<execution>
@@ -562,16 +552,6 @@
 								<phase>integration-test</phase>
 								<configuration>
 									<arguments>run test:e2e-detached</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>npm run test:coverage</id>
-								<goals>
-									<goal>npm</goal>
-								</goals>
-								<phase>integration-test</phase>
-								<configuration>
-									<arguments>run test:coverage</arguments>
 								</configuration>
 							</execution>
 						</executions>

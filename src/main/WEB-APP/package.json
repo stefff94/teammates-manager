@@ -9,6 +9,7 @@
     "test:unit-watch": "vue-cli-service test:unit tests/unit/* --watch",
     "test:it": "vue-cli-service test:unit tests/it/*",
     "test:it-watch": "vue-cli-service test:unit tests/it/* --watch",
+    "test:unit-it": "vue-cli-service test:unit",
     "test:coverage": "vue-cli-service test:unit --coverage",
     "test:e2e-detached": "vue-cli-service test:e2e --headless",
     "test:e2e-attached": "vue-cli-service test:e2e",
