@@ -34,7 +34,7 @@
 			${project.reporting.outputDirectory}/jacoco/jacoco.xml
 		</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.javascript.lcov.reportPaths>
-			**/coverage/lcov.info
+			${basedir}/src/main/WEB-APP/coverage/lcov.info
 		</sonar.javascript.lcov.reportPaths>
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports,
@@ -43,14 +43,14 @@
 		<sonar.sources>
 			pom.xml,
 			${project.build.sourceDirectory},
-			**/WEB-APP/src
+			${basedir}/src/main/WEB-APP/src
 		</sonar.sources>
 		<sonar.tests>
 			${project.build.testSourceDirectory},
 			${basedir}/src/it/java,
 			${basedir}/src/e2e/java,
-			**/WEB-APP/tests/unit,
-			**/WEB-APP/tests/it,
+			${basedir}/src/main/WEB-APP/tests/unit,
+			${basedir}/src/main/WEB-APP/tests/it,
 		</sonar.tests>
 		<sonar.test.inclusions>
 			**/tests/unit/**/*.spec.js,
@@ -67,6 +67,9 @@
 			**/ApiService.js,
 			**/main.js
 		</sonar.coverage.exclusions>
+		<sonar.verbose>
+			true
+		</sonar.verbose>
 		<sonar.issue.ignore.multicriteria>e11,e12,e13,randomImageSH,iTagForIcons</sonar.issue.ignore.multicriteria>
 		<!-- "Tests should include assertions" disabled for default Spring test -->
 		<sonar.issue.ignore.multicriteria.e11.ruleKey>
