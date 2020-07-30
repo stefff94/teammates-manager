@@ -29,15 +29,16 @@ build/
 
 ### VS Code ###
 .DS_Store
-node_modules
-dist
 
 ### Frontend ###
 /src/main/resources/public
 /src/main/WEB-APP/semantic
+/src/main/WEB-APP/coverage
 /src/main/WEB-APP/tests/e2e/videos/
 /src/main/WEB-APP/tests/e2e/screenshots/
 /src/main/WEB-APP/tests/e2e/cucumber-json/
+dist
+node_modules
 
 # local env files
 .env.local
@@ -55,7 +56,5 @@ yarn-error.log*
 *.sln
 *.sw?
 
-/coverage
-/semantic
 
 test-report.xml

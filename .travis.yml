@@ -20,6 +20,7 @@ cache:
     - $HOME/.m2
     - src/main/WEB-APP/semantic
     - src/main/WEB-APP/node_modules
+    - $HOME/.cache/Cypress
 
 deploy:
   provider: script
