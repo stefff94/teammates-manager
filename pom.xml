@@ -57,7 +57,7 @@
 			**/ApiService.js,
 			**/main.js
 		</sonar.coverage.exclusions>
-		<sonar.issue.ignore.multicriteria>e11,e12,e13</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria>e11,e12,e13,randomImageSH,iTagForIcons</sonar.issue.ignore.multicriteria>
 		<!-- "Tests should include assertions" disabled for default Spring test -->
 		<sonar.issue.ignore.multicriteria.e11.ruleKey>
 			java:S2699
