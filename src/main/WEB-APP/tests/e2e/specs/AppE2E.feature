@@ -38,6 +38,7 @@ Feature: App E2E Tests
 		Given I visit the app root page
 		When I click the teammate's "delete" button
 		Then I see it disappear
+
 	@cleanDB
 	Scenario: Filling the form and pressing Submit, I should see a new teammate with the data
 		Given I visit the app root page
