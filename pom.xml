@@ -85,13 +85,13 @@
 			javascript:S2245
 		</sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
 		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
-			src/main/WEB-APP/App.vue
+			**/App.vue
 		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
 		<sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
 			Web:BoldAndItalicTagsCheck
 		</sonar.issue.ignore.multicriteria.iTagForIcons.ruleKey>
 		<sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
-			src/main/WEB-APP/src/**/*.vue
+			**/*.vue
 		</sonar.issue.ignore.multicriteria.randomImageSH.resourceKey>
 	</properties>
 
@@ -290,7 +290,7 @@
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<arguments>install</arguments>
+							<arguments>install -f</arguments>
 						</configuration>
 					</execution>
 				</executions>
