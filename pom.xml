@@ -215,7 +215,7 @@
 					<maxAttempts>180</maxAttempts>
 				</configuration>
 			</plugin>
-			<!--<plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
@@ -233,7 +233,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>-->
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -286,14 +286,15 @@
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
-					<configuration>
+<!--					<configuration>
 						<sourceDirectories>
-							<sourceDirectory>${project.basedir}/src/main/WEB-APP/src</sourceDirectory>
+							<sourceDirectory>${project.build.directory}/classes/frontend</sourceDirectory>
 						</sourceDirectories>
+						<scanForSources>true</scanForSources>
 						<coberturaReports>
 							<coberturaReport>${project.basedir}/src/main/WEB-APP/coverage/cobertura-coverage.xml</coberturaReport>
 						</coberturaReports>
-					</configuration>
+					</configuration>-->
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
@@ -342,7 +343,7 @@
 							<argLine>@{surefireArgLine}</argLine>
 						</configuration>
 					</plugin>
-					<plugin>
+					<!--<plugin>
 						<groupId>org.pitest</groupId>
 						<artifactId>pitest-maven</artifactId>
 						<version>${pitest.version}</version>
@@ -374,7 +375,7 @@
 							</mutators>
 							<mutationThreshold>80</mutationThreshold>
 						</configuration>
-					</plugin>
+					</plugin>-->
 				</plugins>
 			</build>
 		</profile>
