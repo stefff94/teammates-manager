@@ -307,6 +307,11 @@
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
+					<configuration>
+						<relativeReportDirs>
+							<relativeReportDir>${project.basedir}/src/main/WEB-APP/coverage/lcov.info</relativeReportDir>
+						</relativeReportDirs>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
@@ -389,20 +394,6 @@
 						</configuration>
 					</plugin>
 				</plugins>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.eluder.coveralls</groupId>
-							<artifactId>coveralls-maven-plugin</artifactId>
-							<version>${coveralls.version}</version>
-						</plugin>
-						<plugin>
-							<groupId>org.sonarsource.scanner.maven</groupId>
-							<artifactId>sonar-maven-plugin</artifactId>
-							<version>${sonar.version}</version>
-						</plugin>
-					</plugins>
-				</pluginManagement>
 			</build>
 		</profile>
 		<profile>
