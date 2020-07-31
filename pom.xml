@@ -308,9 +308,9 @@
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
 					<configuration>
-						<sourceDirectories>
-							<sourceDirectory>${project.basedir}/src/main/WEB-APP</sourceDirectory>
-						</sourceDirectories>
+						<coberturaReports>
+							<coberturaReport>${project.basedir}/src/main/WEB-APP/coverage/cobertura-coverage.xml</coberturaReport>
+						</coberturaReports>
 					</configuration>
 				</plugin>
 				<plugin>
