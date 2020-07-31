@@ -24,8 +24,6 @@ script:
   - ./mvnw clean verify -Pjacoco && ./mvnw verify -P test-frontend  && ./mvnw coveralls:report
 
 after_script:
-  - sudo apt-get update -y
-  - sudo apt-get install -y ruby-coveralls
-  - cat ./src/main/WEB-APP/coverage/lcov.info | coveralls
+  - cat ./src/main/WEB-APP/coverage/lcov.info | ./src/main/WEB-APP/node_modules/coveralls/bin/coveralls.js
 
 
