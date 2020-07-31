@@ -173,7 +173,7 @@
 
 	<build>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>${frabric8.docker.version}</version>
@@ -206,7 +206,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -215,7 +215,7 @@
 					<maxAttempts>180</maxAttempts>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
@@ -233,7 +233,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -244,7 +244,7 @@
 					</includes>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<executions>
@@ -262,8 +262,8 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
+			</plugin>-->
+			<!--<plugin>
 				<groupId>com.heroku.sdk</groupId>
 				<artifactId>heroku-maven-plugin</artifactId>
 				<version>${heroku.version}</version>
@@ -278,7 +278,7 @@
 						<web>java $JAVA_OPTS -jar -Dserver.port=$PORT -Dspring.profiles.active=prod	target/${project.build.finalName}.jar</web>
 					</processTypes>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
@@ -399,7 +399,7 @@
 				</plugins>
 			</build>
 		</profile>
-		<profile>
+		<!--<profile>
 			<id>e2e-backend-tests</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -421,8 +421,8 @@
 								</goals>
 								<configuration>
 									<arguments>
-										<!--suppress UnresolvedMavenProperty -->
-										<argument>--server.port=8080</argument>
+										&lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;
+										<argument>&#45;&#45;server.port=8080</argument>
 									</arguments>
 								</configuration>
 							</execution>
@@ -453,14 +453,14 @@
 						</executions>
 						<configuration>
 							<systemPropertyVariables>
-								<!--suppress UnresolvedMavenProperty -->
+								&lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;
 								<server.port>8080</server.port>
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
+		</profile>-->
 		<profile>
 			<id>test-frontend</id>
 			<activation>
@@ -528,7 +528,7 @@
 									<arguments>run test:unit-it</arguments>
 								</configuration>
 							</execution>
-							<execution>
+<!--							<execution>
 								<id>npm run test:e2e</id>
 								<goals>
 									<goal>npm</goal>
@@ -537,7 +537,7 @@
 								<configuration>
 									<arguments>run test:e2e-detached</arguments>
 								</configuration>
-							</execution>
+							</execution>-->
 						</executions>
 					</plugin>
 				</plugins>

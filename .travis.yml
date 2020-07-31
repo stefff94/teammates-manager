@@ -21,6 +21,6 @@ cache:
     - src/main/WEB-APP/semantic
 
 script:
-  - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -P test-frontend  && ./mvnw coveralls:report sonar:sonar
+  - ./mvnw clean verify -Pjacoco && ./mvnw verify -P test-frontend  && ./mvnw coveralls:report -e sonar:sonar
 
 
