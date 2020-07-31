@@ -270,7 +270,7 @@
 				<artifactId>heroku-maven-plugin</artifactId>
 				<version>${heroku.version}</version>
 				<configuration>
-					<appName>teammates-manager-backend</appName>
+					<appName>teammates-manager</appName>
 					<includeTarget>false</includeTarget>
 					<includes>
 						<include>${project.build.directory}/${project.build.finalName}.jar</include>
@@ -280,27 +280,6 @@
 						<web>java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=prod -jar target/${project.build.finalName}.jar</web>
 					</processTypes>
 				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>Copy Vue.js frontend assets</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>src/main/resources/public</outputDirectory>
-							<overwrite>true</overwrite>
-							<resources>
-								<resource>
-									<directory>src/main/WEB-APP/dist</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -527,6 +506,16 @@
 								</configuration>
 							</execution>
 							<execution>
+								<id>npm run build</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<arguments>run build</arguments>
+								</configuration>
+							</execution>
+							<execution>
 								<id>npm run test:unit-it</id>
 								<goals>
 									<goal>npm</goal>
@@ -544,6 +533,27 @@
 								<phase>integration-test</phase>
 								<configuration>
 									<arguments>run test:e2e-detached</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>Copy Vue.js frontend assets</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>src/main/resources/public</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>src/main/WEB-APP/dist</directory>
+										</resource>
+									</resources>
 								</configuration>
 							</execution>
 						</executions>

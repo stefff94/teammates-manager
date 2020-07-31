@@ -1,5 +1,4 @@
 import { When, Then, Before, After, And } from "cypress-cucumber-preprocessor/steps";
-import ApiService from "../../../../src/services/ApiService";
 
 let stefano = {
     personalData: {
@@ -31,10 +30,13 @@ let paolo = {
 };
 
 Before({ tags: "@initializeDB" }, () => {
-    ApiService.insertTeammate(stefano).then(response =>
+    process.env = Object.assign(process.env, { VUE_APP_BACKEND_IP: 'http://localhost:8080' });
+    let api = require('../../../../src/services/ApiService.js');
+
+    api.ApiService.insertTeammate(stefano).then(response =>
         stefano.id = response.data.id);
 
-    ApiService.insertTeammate(paolo).then(response =>
+    api.ApiService.insertTeammate(paolo).then(response =>
         paolo.id = response.data.id);
 
     cy.wait(1500);

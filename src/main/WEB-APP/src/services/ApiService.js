@@ -1,10 +1,7 @@
 import axios from "axios";
+const backendBaseUrl = process.env.VUE_APP_BACKEND_IP + "/api";
 
-// const backendBaseUrl = process.env.VUE_APP_BACKEND_IP + ':' +
-//     process.env.VUE_APP_BACKEND_PORT + "/api";
-const backendBaseUrl = 'http://localhost:8080/api';
-
-class ApiService {
+export class ApiService {
 
     static insertTeammate(newTeammate) {
         return axios.post(backendBaseUrl + '/teammates/new', newTeammate);
