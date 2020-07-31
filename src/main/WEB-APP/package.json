@@ -96,9 +96,6 @@
     "collectCoverageFrom": [
       "**/src/**/*.vue"
     ],
-    "coverageReporters": [
-      "cobertura"
-    ],
     "testResultsProcessor": "jest-sonar-reporter"
   }
 }
