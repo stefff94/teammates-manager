@@ -22,7 +22,7 @@ cache:
 
 deploy:
   provider: script
-  script:  "./mvnw clean heroku:deploy -Ptest-frontend"
+  script:  "./mvnw heroku:deploy -Ptest-frontend"
   api_key: $HEROKU_API_KEY
   on:
     branch: master
