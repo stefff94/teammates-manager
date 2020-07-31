@@ -308,9 +308,9 @@
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
 					<configuration>
-						<relativeReportDirs>
-							<relativeReportDir>${project.basedir}/src/main/WEB-APP/coverage/lcov.info</relativeReportDir>
-						</relativeReportDirs>
+						<sourceDirectories>
+							<sourceDirectory>${project.basedir}/src/main/WEB-APP</sourceDirectory>
+						</sourceDirectories>
 					</configuration>
 				</plugin>
 				<plugin>
