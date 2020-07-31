@@ -307,9 +307,6 @@
 					<groupId>org.eluder.coveralls</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
 					<version>${coveralls.version}</version>
-					<configuration>
-						<sourceDirectories>${project.basedir}/src/main/WEB-APP</sourceDirectories>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>

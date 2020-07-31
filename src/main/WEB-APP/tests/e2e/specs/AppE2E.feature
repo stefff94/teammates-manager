@@ -2,30 +2,6 @@ Feature: App E2E Tests
 
 	I want to make sure that the whole application is working properly
 
-	Scenario: Filling the form with a wrong values and pressing Submit, I should see an error
-		Given I visit the app root page
-		And I fill "name" with "Paolo1"
-		And I fill "email" with "paolo innocenti"
-		And I select "M" for "gender-dropdown"
-		And I fill "city" with "Florence1"
-		And I select "Student" for "role-dropdown"
-		And I insert "Skill" in the multiselect
-		When I click on "Submit"
-		Then I should see the error message: "Please enter a correct value for field name"
-		And I should see the error message: "Please enter a correct value for field email"
-		And I should see the error message: "Please enter a correct value for field city"
-
-	Scenario: Filling the form and pressing Reset, I should see an empty form
-		Given I visit the app root page
-		And I fill "name" with "Paolo"
-		And I fill "email" with "paolo.innocenti@stud.unifi.it"
-		And I select "M" for "gender-dropdown"
-		And I fill "city" with "Florence"
-		And I select "Student" for "role-dropdown"
-		And I insert "Skill" in the multiselect
-		When I click on "Reset"
-		Then There shouldn't be any data in the fields
-
 	@initializeDB
 	@cleanDB
 	Scenario: Visiting the app root page, I should see the teammates list

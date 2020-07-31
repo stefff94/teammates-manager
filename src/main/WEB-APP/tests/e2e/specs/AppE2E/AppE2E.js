@@ -30,9 +30,14 @@ let paolo = {
     ]
 };
 
-Before({ tags: "@initializeDB" }, async () => {
-    ApiService.insertTeammate(stefano).then(response => stefano.id = response.data.id);
-    ApiService.insertTeammate(paolo).then(response => paolo.id = response.data.id);
+Before({ tags: "@initializeDB" }, () => {
+    ApiService.insertTeammate(stefano).then(response =>
+        stefano.id = response.data.id);
+
+    ApiService.insertTeammate(paolo).then(response =>
+        paolo.id = response.data.id);
+
+    cy.wait(1500);
 });
 
 When(`I visit the app root page`, () => {
@@ -109,25 +114,14 @@ And(/^I insert "(.*?)" in the multiselect$/, skillName => {
         .click();
 });
 
+/*And("I wait for a while", () => {
+
+});*/
+
 When(/^I click on "(.*?)"$/, buttonName => {
     cy.get(".ui.button")
         .contains(buttonName)
         .click();
-});
-
-Then("There shouldn't be any data in the fields", () => {
-    cy.get("input[name='name']")
-        .should("be.empty");
-    cy.get("input[name='email']")
-        .should("be.empty");
-    cy.get(".ui.selection.dropdown.gender-dropdown")
-        .should("contain", "Gender");
-    cy.get("input[name='city']")
-        .should("be.empty");
-    cy.get(".ui.selection.dropdown.role-dropdown")
-        .should("contain", "Role")
-    cy.get("#skill-multiselect")
-        .should("contain", "Search or add a new skill");
 });
 
 Then("There should be a teammate card for the new teammate", () => {
@@ -164,17 +158,6 @@ Then("There should be a teammate card with the updated teammate", () => {
         .should("contain", "Vue js");
     cards
         .should("contain", "Another skill");
-});
-
-Then(/^I should see the error message: "(.*?)"$/, message => {
-    cy.get(".ui.error.message .header")
-        .get("span")
-        .should("contain", "Issues");
-
-    cy.get(".ui.error.message .header")
-        .get("ul")
-        .children()
-        .should("contain", message);
 });
 
 After({ tags: "@cleanDB" }, () => {
