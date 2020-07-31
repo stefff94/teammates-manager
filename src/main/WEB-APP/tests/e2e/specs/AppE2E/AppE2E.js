@@ -114,10 +114,6 @@ And(/^I insert "(.*?)" in the multiselect$/, skillName => {
         .click();
 });
 
-/*And("I wait for a while", () => {
-
-});*/
-
 When(/^I click on "(.*?)"$/, buttonName => {
     cy.get(".ui.button")
         .contains(buttonName)

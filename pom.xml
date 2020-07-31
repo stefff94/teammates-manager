@@ -53,11 +53,13 @@
 			${basedir}/src/it/java,
 			${basedir}/src/e2e/java,
 			${basedir}/src/main/WEB-APP/tests/unit,
-			${basedir}/src/main/WEB-APP/tests/it
+			${basedir}/src/main/WEB-APP/tests/it,
+			${basedir}/src/main/WEB-APP/tests/e2e/specs
 		</sonar.tests>
 		<sonar.test.inclusions>
 			**/tests/unit/**/*.spec.js,
-			**/tests/it/*.spec.js
+			**/tests/it/*.spec.js,
+			${basedir}/src/main/WEB-APP/tests/e2e/specs/**/*
 		</sonar.test.inclusions>
 		<sonar.exclusions>
 			**/variables.js
@@ -275,7 +277,7 @@
 					</includes>
 					<jdkVersion>1.8</jdkVersion>
 					<processTypes>
-						<web>java $JAVA_OPTS -jar -Dserver.port=$PORT -Dspring.profiles.active=prod	target/${project.build.finalName}.jar</web>
+						<web>java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=prod -jar target/${project.build.finalName}.jar</web>
 					</processTypes>
 				</configuration>
 			</plugin>
