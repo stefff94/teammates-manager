@@ -3,7 +3,10 @@
   "mutate": [
     "src/**/*.vue"
   ],
-  "mutator": "vue",
+  "mutator": {
+    "name": "vue",
+    "excludedMutations": ["StringLiteral"]
+  },
   "testRunner": "jest",
   "jest": {},
   "reporters": [

@@ -110,7 +110,7 @@
                 avatars: avatars,
                 teammates: [],
                 rules: rules,
-                errorLoadingTeammates: false,
+                errorLoadingTeammates: null,
                 errorDeletingTeammate: false,
                 errorInsertingTeammate: false,
                 errorUpdatingTeammate: false
