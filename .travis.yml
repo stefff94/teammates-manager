@@ -23,13 +23,13 @@ cache:
 deploy:
   provider: script
   script:  "./mvnw -Ptest-frontend clean heroku:deploy"
-  skip_cleanup: true
   api_key: $HEROKU_API_KEY
   on:
     branch: travis-config
+  skip_cleanup: true
 
 script:
-  - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -P test-frontend
+  - ./mvnw clean verify -Pjacoco
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
