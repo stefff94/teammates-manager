@@ -22,10 +22,10 @@ cache:
 
 deploy:
   provider: script
-  script:  "./mvnw -P test-frontend clean heroku:deploy"
+  script:  "./mvnw -Ptest-frontend clean heroku:deploy"
   api_key: $HEROKU_API_KEY
   on:
-    branch: master
+    branch: travis-config
 
 script:
   - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -P test-frontend
