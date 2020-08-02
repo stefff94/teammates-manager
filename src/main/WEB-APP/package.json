@@ -9,11 +9,11 @@
     "test:unit-watch": "vue-cli-service test:unit tests/unit/* --watch",
     "test:it": "vue-cli-service test:unit tests/it/*",
     "test:it-watch": "vue-cli-service test:unit tests/it/* --watch",
-    "test:unit-it": "vue-cli-service test:unit",
+    "test:unit-it": "vue-cli-service test:unit && stryker run",
     "test:coverage": "vue-cli-service test:unit --coverage",
     "test:e2e-detached": "vue-cli-service test:e2e --headless --mode e2e",
     "test:e2e-attached": "vue-cli-service test:e2e --mode e2e",
-    "test:all": "vue-cli-service test:unit && vue-cli-service test:e2e --headless",
+    "test:all": "vue-cli-service test:unit-it && vue-cli-service test:e2e --headless --mode e2e",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -27,6 +27,10 @@
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.1.2",
+    "@stryker-mutator/core": "^3.3.1",
+    "@stryker-mutator/javascript-mutator": "^3.3.1",
+    "@stryker-mutator/jest-runner": "^3.3.1",
+    "@stryker-mutator/vue-mutator": "^3.3.1",
     "@vue/cli-plugin-babel": "~4.4.6",
     "@vue/cli-plugin-e2e-cypress": "~4.4.6",
     "@vue/cli-plugin-eslint": "~4.4.6",

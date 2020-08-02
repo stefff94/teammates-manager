@@ -71,7 +71,6 @@
     import Card from "./components/Card";
 
     export default {
-        name: 'App',
         components: {
             Card,
             PersonalDataForm,
@@ -111,7 +110,7 @@
                 avatars: avatars,
                 teammates: [],
                 rules: rules,
-                errorLoadingTeammates: false,
+                errorLoadingTeammates: null,
                 errorDeletingTeammate: false,
                 errorInsertingTeammate: false,
                 errorUpdatingTeammate: false
@@ -179,8 +178,7 @@
                 this.errorInsertingTeammate = false;
                 this.errorUpdatingTeammate = false;
                 if (this.teammateIsValid()) {
-                    if (typeof this.newTeammate.id === 'undefined'
-                        || this.newTeammate.id == null) {
+                    if (this.newTeammate.id == null) {
 
                         this.insertTeammate();
                     } else {
@@ -232,9 +230,13 @@
             },
             getSkillsAndUpdateView() {
                 let self = this;
-                this.skills = [];
                 ApiService.getSkills()
-                    .then((response) => self.skills = response.data)
+                    .then((response) => {
+                        response.data.forEach( skill => {
+                            if( !self.skills.includes(skill) )
+                                self.skills.push(skill);
+                        })
+                    })
             },
             updateTeammate() {
                 const newTeammate = {

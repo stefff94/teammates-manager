@@ -18,15 +18,12 @@
     import CardFront from "./CardFront";
 
     export default {
-        name: "Card",
         components: {
             CardBack,
             CardFront
         },
         props: {
-            person: {
-                type: Object
-            }
+            person: {}
         },
         methods: {
             deleteTeammate(id) {

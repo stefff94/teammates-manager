@@ -48,7 +48,6 @@
 
 <script>
     export default {
-        name: "PersonalDataForm",
         props: {
             teammate: Object,
             genders: Array,

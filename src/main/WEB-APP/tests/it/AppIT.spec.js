@@ -268,7 +268,7 @@ describe("The teammate is deleted", () => {
 
 });
 
-describe("The teammate is updated after performing the edit operation", () => {
+describe("The teammate is updated after performing the edit operation",  () => {
 
     beforeEach(() => {
         const respInsertTeammate = { data: {
@@ -279,7 +279,7 @@ describe("The teammate is updated after performing the edit operation", () => {
         wrapper = mount(App);
     });
 
-    it("it populates the newTeammate object", () => {
+    it("it populates the newTeammate object", async () => {
         const expectedNewTeammate = {
             id: 1,
             name: {
@@ -350,6 +350,9 @@ describe("The teammate is updated after performing the edit operation", () => {
 
         multiselect.vm.$emit('tag', "newSkill");
 
+        const expectedSkills = respGetSkills;
+        expectedSkills.push({id:3, name: "newSkill"})
+
         const expectedTeammate = {
             id: 1,
             personalData: {
@@ -363,7 +366,7 @@ describe("The teammate is updated after performing the edit operation", () => {
                 email: 'NewEmail@email.it',
                 city: 'new city'
             },
-            skills: respGetSkills
+            skills: expectedSkills
         }
 
         await wrapper.vm.$nextTick();

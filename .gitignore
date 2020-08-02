@@ -39,6 +39,8 @@ build/
 /src/main/WEB-APP/tests/e2e/cucumber-json/
 dist
 node_modules
+test-report.xml
+/src/main/WEB-APP/reports/
 
 # local env files
 .env.local
@@ -57,4 +59,4 @@ yarn-error.log*
 *.sw?
 
 
-test-report.xml
+
