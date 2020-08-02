@@ -179,8 +179,7 @@
                 this.errorInsertingTeammate = false;
                 this.errorUpdatingTeammate = false;
                 if (this.teammateIsValid()) {
-                    if (typeof this.newTeammate.id === 'undefined'
-                        || this.newTeammate.id == null) {
+                    if (this.newTeammate.id == null) {
 
                         this.insertTeammate();
                     } else {
@@ -232,7 +231,6 @@
             },
             getSkillsAndUpdateView() {
                 let self = this;
-                this.skills = [];
                 ApiService.getSkills()
                     .then((response) => self.skills = response.data)
             },

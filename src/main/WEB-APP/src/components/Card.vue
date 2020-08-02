@@ -24,9 +24,7 @@
             CardFront
         },
         props: {
-            person: {
-                type: Object
-            }
+            person: {}
         },
         methods: {
             deleteTeammate(id) {

@@ -26,12 +26,8 @@
     export default {
         name: "CardBack",
         props: {
-            skills: {
-                type: Array
-            },
-            id: {
-                type: Number
-            }
+            skills: Array,
+            id: Number
         },
         methods: {
             deleteTeammate() {

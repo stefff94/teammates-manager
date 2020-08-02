@@ -6,7 +6,7 @@ import ApiService from "../../src/services/ApiService";
 import Card from "../../src/components/Card";
 import PersonalDataForm from "../../src/components/PersonalDataForm";
 import TagMultiselect from "../../src/components/TagMultiselect";
-import { avatarBaseUrl, avatars, roles } from "../../src/variables";
+import { avatarBaseUrl, roles } from "../../src/variables";
 
 import jQuery from 'jquery'
 import $ from 'jquery'
@@ -323,6 +323,8 @@ describe("The teammate is deleted correctly", () => {
         expect(wrapper.vm.teammates
             .find(t => t.id === teammateToDelete))
             .toBeUndefined();
+        expect(wrapper.vm.errorDeletingTeammate)
+            .toBeFalsy();
     });
 
 });
@@ -359,14 +361,18 @@ describe("The teammate is being updated after performing the edit operation", ()
 
     let spyUpdateMethod = null;
     let spyPopulateSelects = null;
+    let spyJQuery = null;
 
     beforeEach(() => {
         spyUpdateMethod = jest.spyOn(App.methods,
             "populateNewTeammateForUpdate");
         spyPopulateSelects = jest.spyOn(App.methods,
             "populateSelects");
+        spyJQuery = jest.spyOn($.fn,
+            "dropdown");
 
         wrapper = shallowMount(App);
+        spyJQuery.mockClear();
     });
 
     it("it populates the corresponding object", () => {
@@ -382,15 +388,19 @@ describe("The teammate is being updated after performing the edit operation", ()
             .toEqual(newTeammate);
         expect(spyPopulateSelects)
             .toHaveBeenCalledTimes(1);
+        expect(spyJQuery)
+            .toHaveBeenCalledTimes(2);
     });
 
 });
 
 describe('the form is reset', () => {
     let spyResetSelects = null;
+    let spyJQuery = null;
 
     beforeEach( () => {
         spyResetSelects = jest.spyOn(App.methods, 'resetSelects');
+        spyJQuery = jest.spyOn($.fn, 'dropdown');
 
         wrapper = shallowMount(App, {
             data() {
@@ -399,6 +409,8 @@ describe('the form is reset', () => {
                 }
             }
         });
+
+        spyJQuery.mockClear();
     })
 
     it('resets the PersonalDataForm and the TagMultiselect on Reset button click', () => {
@@ -415,12 +427,17 @@ describe('the form is reset', () => {
         }
         const resetButton = wrapper.find('button.ui.button:nth-of-type(2)');
 
+
         resetButton.trigger('click');
 
         expect(wrapper.vm.$data.newTeammate)
             .toStrictEqual(emptyTeammate);
         expect(spyResetSelects)
             .toHaveBeenCalled();
+        expect(spyJQuery)
+            .toHaveBeenCalledTimes(1);
+        expect(spyJQuery)
+            .toHaveBeenCalledWith('clear');
     })
 })
 
@@ -576,12 +593,13 @@ describe('the teammate is updated and the view is updated accordingly', () => {
     let spyUpdateViewAfterUpdate = null;
     let spyClearNewTeammate = null;
     let spyGetSkillsAndUpdateView = null;
-    let savedTeammate = null;
+    let savedTeammate1 = null;
+    let savedTeammate2 = null;
 
     beforeEach(() => {
         newTeammate.id = 1;
 
-        savedTeammate = {
+        savedTeammate1 = {
             id: 1,
             personalData: {
                 name: newTeammate.name.value,
@@ -589,13 +607,27 @@ describe('the teammate is updated and the view is updated accordingly', () => {
                     return r.id === newTeammate.role.value
                 }).name,
                 gender: newTeammate.gender.value,
-                photoUrl: avatars[newTeammate.gender.value][2],
+                photoUrl: newTeammate.photoUrl.value,
                 email: newTeammate.email.value,
                 city: newTeammate.city.value
             },
             skills: newTeammate.skills
         }
-        teammates = [savedTeammate];
+        savedTeammate2 = {
+            id: 2,
+            personalData: {
+                name: newTeammate.name.value,
+                role: roles.find(r => {
+                    return r.id === newTeammate.role.value
+                }).name,
+                gender: newTeammate.gender.value,
+                photoUrl: newTeammate.photoUrl.value,
+                email: 'mail@mail.it',
+                city: newTeammate.city.value
+            },
+            skills: newTeammate.skills
+        }
+        teammates = [savedTeammate1, savedTeammate2];
         ApiService.getAllTeammates.mockResolvedValue({data: teammates});
 
 
@@ -687,7 +719,9 @@ describe('the teammate is updated and the view is updated accordingly', () => {
                 {id: 1, name: 'skill1'}
             ],
             errors: [],
-            photoUrl: teammates[0].personalData.photoUrl
+            photoUrl: {
+                value: teammates[0].personalData.photoUrl
+            }
         }
         await wrapper.setData({
             newTeammate: updatedTeammate
@@ -718,10 +752,65 @@ describe('the teammate is updated and the view is updated accordingly', () => {
             .toBe(teammatesLength);
         expect(wrapper.vm.teammates)
             .toContainEqual(expectedTeammate);
+        expect(wrapper.vm.teammates)
+            .toContainEqual(savedTeammate2);
         expect(spyClearNewTeammate)
             .toHaveBeenCalledTimes(1);
         expect(spyGetSkillsAndUpdateView)
             .toHaveBeenCalledTimes(1);
+    })
+
+    it('does not change the photoURL if the gender does not change', async () => {
+        const updatedTeammate = {
+            id: 1,
+            name: {
+                value: 'New name'
+            },
+            gender: {
+                value: 'M'
+            },
+            email: {
+                value: 'newemail@email.it'
+            },
+            city: {
+                value: 'NewCity'
+            },
+            role: {
+                value: 'R2'
+            },
+            skills: [
+                {id: 1, name: 'skill1'}
+            ],
+            errors: [],
+            photoUrl: {
+                value: teammates[0].personalData.photoUrl
+            }
+        }
+
+        await wrapper.setData({
+            newTeammate: updatedTeammate
+        })
+
+        const expectedTeammate = {
+            id: 1,
+            personalData: {
+                name: updatedTeammate.name.value,
+                role: wrapper.vm.roles.find(r => {
+                    return r.id === updatedTeammate.role.value
+                }).name,
+                gender: updatedTeammate.gender.value,
+                photoUrl: teammates[0].personalData.photoUrl,
+                email: updatedTeammate.email.value,
+                city: updatedTeammate.city.value
+            },
+            skills: updatedTeammate.skills
+        }
+
+        wrapper.vm.updateTeammate()
+        await flushPromises();
+
+        expect(wrapper.vm.teammates)
+            .toContainEqual(expectedTeammate);
     })
 
     it('shows an error message if unable to update the teammate', async () => {
@@ -766,7 +855,68 @@ describe('the teammate is not valid', () => {
         wrapper = shallowMount(App);
     })
 
-    it('disables submit if teammate is not valid', () => {
+    it('disables submit if teammate.name is not valid', async () => {
+        newTeammate.name = {};
+        await wrapper.setData({
+            newTeammate: newTeammate
+        })
+
+        expect(wrapper.vm.submitDisabled)
+            .toBeTruthy();
+        expect(wrapper
+            .find('button.ui.button:nth-of-type(1)')
+            .attributes('disabled'))
+            .toBeDefined();
+    })
+
+    it('disables submit if teammate.gender is not valid', async () => {
+        newTeammate.gender = {};
+        await wrapper.setData({
+            newTeammate: newTeammate
+        })
+
+        expect(wrapper.vm.submitDisabled)
+            .toBeTruthy();
+        expect(wrapper
+            .find('button.ui.button:nth-of-type(1)')
+            .attributes('disabled'))
+            .toBeDefined();
+    })
+
+    it('disables submit if teammate.email is not valid', async () => {
+        newTeammate.email = {};
+        await wrapper.setData({
+            newTeammate: newTeammate
+        })
+
+        expect(wrapper.vm.submitDisabled)
+            .toBeTruthy();
+        expect(wrapper
+            .find('button.ui.button:nth-of-type(1)')
+            .attributes('disabled'))
+            .toBeDefined();
+    })
+
+    it('disables submit if teammate.role is not valid', async () => {
+        newTeammate.role = {};
+        await wrapper.setData({
+            newTeammate: newTeammate
+        })
+
+        expect(wrapper.vm.submitDisabled)
+            .toBeTruthy();
+        expect(wrapper
+            .find('button.ui.button:nth-of-type(1)')
+            .attributes('disabled'))
+            .toBeDefined();
+    })
+
+    it('disables submit if teammate.city is not valid', async () => {
+        newTeammate.city = {};
+        await wrapper.setData({
+            newTeammate: newTeammate
+        })
+
         expect(wrapper.vm.submitDisabled)
             .toBeTruthy();
         expect(wrapper
@@ -789,6 +939,10 @@ describe('the teammate is not valid', () => {
             .toContain("Please enter a correct value for field email")
         expect(wrapper.vm.newTeammate.email.error)
             .toBeTruthy();
+        expect(wrapper.vm.newTeammate.name.error)
+            .toBeFalsy();
+        expect(wrapper.vm.newTeammate.city.error)
+            .toBeFalsy();
     })
 
     it('does not update the teammate if email is invalid', async () => {
@@ -806,6 +960,10 @@ describe('the teammate is not valid', () => {
             .toContain("Please enter a correct value for field email")
         expect(wrapper.vm.newTeammate.email.error)
             .toBeTruthy();
+        expect(wrapper.vm.newTeammate.name.error)
+            .toBeFalsy();
+        expect(wrapper.vm.newTeammate.city.error)
+            .toBeFalsy();
     })
 
     it('does not insert the teammate if name is invalid', async () => {
@@ -822,6 +980,10 @@ describe('the teammate is not valid', () => {
             .toContain("Please enter a correct value for field name")
         expect(wrapper.vm.newTeammate.name.error)
             .toBeTruthy();
+        expect(wrapper.vm.newTeammate.email.error)
+            .toBeFalsy();
+        expect(wrapper.vm.newTeammate.city.error)
+            .toBeFalsy();
     })
 
     it('does not update the teammate if name is invalid', async () => {
@@ -839,6 +1001,10 @@ describe('the teammate is not valid', () => {
             .toContain("Please enter a correct value for field name")
         expect(wrapper.vm.newTeammate.name.error)
             .toBeTruthy();
+        expect(wrapper.vm.newTeammate.email.error)
+            .toBeFalsy();
+        expect(wrapper.vm.newTeammate.city.error)
+            .toBeFalsy();
     })
 
     it('does not insert the teammate if city is invalid', async () => {
@@ -855,6 +1021,10 @@ describe('the teammate is not valid', () => {
             .toContain("Please enter a correct value for field city")
         expect(wrapper.vm.newTeammate.city.error)
             .toBeTruthy();
+        expect(wrapper.vm.newTeammate.name.error)
+            .toBeFalsy();
+        expect(wrapper.vm.newTeammate.email.error)
+            .toBeFalsy();
     })
 
     it('does not update the teammate if city is invalid', async () => {
@@ -872,6 +1042,10 @@ describe('the teammate is not valid', () => {
             .toContain("Please enter a correct value for field city")
         expect(wrapper.vm.newTeammate.city.error)
             .toBeTruthy();
+        expect(wrapper.vm.newTeammate.name.error)
+            .toBeFalsy();
+        expect(wrapper.vm.newTeammate.email.error)
+            .toBeFalsy();
     })
 })
 
