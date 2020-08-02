@@ -22,7 +22,7 @@ cache:
 
 deploy:
   provider: script
-  script:  "./mvnw heroku:deploy"
+  script:  "./mvnw heroku:deploy-only"
   api_key: $HEROKU_API_KEY
   on:
     branch: master
