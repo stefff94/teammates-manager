@@ -28,6 +28,10 @@ deploy:
     branch: master
 
 script:
-  - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -P test-frontend  && ./mvnw sonar:sonar
+  - ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -P test-frontend
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - ./mvnw sonar:sonar
 
 
