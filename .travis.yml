@@ -25,7 +25,7 @@ deploy:
   script:  "./mvnw -Ptest-frontend clean heroku:deploy"
   api_key: $HEROKU_API_KEY
   on:
-    branch: travis-config
+    branch: master
   skip_cleanup: true
 
 script:
