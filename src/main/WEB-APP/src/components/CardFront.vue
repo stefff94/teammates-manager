@@ -25,7 +25,6 @@
 
 <script>
     export default {
-        name: "CardFront",
         props: {
             data: Object
         }

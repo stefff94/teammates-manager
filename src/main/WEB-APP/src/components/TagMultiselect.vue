@@ -23,7 +23,6 @@
             options: Array,
             teammate: Object
         },
-        name: "TagMultiselect",
         methods: {
             addSkill(newSkill){
                 let maxOptionIndex = 0;

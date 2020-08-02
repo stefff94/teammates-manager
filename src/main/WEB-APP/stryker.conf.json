@@ -12,5 +12,5 @@
     "html"
   ],
   "coverageAnalysis": "off",
-  "timeoutMS": 8000
+  "timeoutMS": 15000
 }

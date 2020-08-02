@@ -24,7 +24,6 @@
 
 <script>
     export default {
-        name: "CardBack",
         props: {
             skills: Array,
             id: Number

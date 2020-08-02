@@ -71,7 +71,6 @@
     import Card from "./components/Card";
 
     export default {
-        name: 'App',
         components: {
             Card,
             PersonalDataForm,

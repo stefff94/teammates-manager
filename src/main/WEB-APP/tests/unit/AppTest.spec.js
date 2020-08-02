@@ -414,6 +414,10 @@ describe("The teammate is being updated after performing the edit operation", ()
             .toHaveBeenCalledTimes(1);
         expect(spyJQuery)
             .toHaveBeenCalledTimes(2);
+        expect(spyJQuery)
+            .toHaveBeenCalledWith('set selected', newTeammate.gender.value);
+        expect(spyJQuery)
+            .toHaveBeenCalledWith('set selected', newTeammate.role.value);
     });
 
 });

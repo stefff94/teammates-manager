@@ -268,7 +268,7 @@ describe("The teammate is deleted", () => {
 
 });
 
-describe("The teammate is updated after performing the edit operation", () => {
+describe("The teammate is updated after performing the edit operation",  () => {
 
     beforeEach(() => {
         const respInsertTeammate = { data: {
@@ -279,7 +279,7 @@ describe("The teammate is updated after performing the edit operation", () => {
         wrapper = mount(App);
     });
 
-    it("it populates the newTeammate object", () => {
+    it("it populates the newTeammate object", async () => {
         const expectedNewTeammate = {
             id: 1,
             name: {
