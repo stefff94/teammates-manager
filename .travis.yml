@@ -21,6 +21,7 @@ cache:
     - src/main/WEB-APP/semantic
 
 deploy:
+  app: teammates-manager
   provider: script
   script:  "./mvnw heroku:deploy-only"
   api_key: $HEROKU_API_KEY
