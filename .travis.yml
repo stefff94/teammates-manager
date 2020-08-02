@@ -21,9 +21,9 @@ cache:
     - src/main/WEB-APP/semantic
 
 script:
-  - ./mvnw clean verify -Pjacoco && ./mvnw verify -P test-frontend  && ./mvnw coveralls:report
+  - ./mvnw clean verify -Pjacoco && ./mvnw verify -P test-frontend
 
-after_script:
-  - cat ./src/main/WEB-APP/coverage/lcov.info | ./src/main/WEB-APP/node_modules/coveralls/bin/coveralls.js
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 
