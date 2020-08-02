@@ -28,7 +28,7 @@ beforeEach(() => {
             personalData: {
                 photoUrl: "https://semantic-ui.com/images/avatar/large/steve.jpg",
                 name: "Stefano Vannucchi",
-                role: "Student",
+                role: "Frontend developer",
                 email: "stefano.vannucchi@stud.unifi.it",
                 city: "Prato",
                 gender: "M"
@@ -43,7 +43,7 @@ beforeEach(() => {
             personalData: {
                 photoUrl: "https://semantic-ui.com/images/avatar/large/matthew.jpg",
                 name: "Paolo Innocenti",
-                role: "Student",
+                role: "Frontend developer",
                 email: "paolo.innocenti@stud.unifi.it",
                 city: "Pistoia",
                 gender: "M"
@@ -69,7 +69,7 @@ beforeEach(() => {
             value: "Prato"
         },
         role: {
-            value: "R1"
+            value: "R2"
         },
         photoUrl: {
             value: "https://semantic-ui.com/images/avatar/large/steve.jpg"
@@ -242,7 +242,31 @@ describe("App.vue", () => {
         });
     });
 
+
 });
+
+describe("The App component is initialized properly", () => {
+
+    beforeEach(() => {
+        wrapper = shallowMount(App);
+
+    });
+
+    it("initializes the skills properly", async () => {
+        expect(wrapper.vm.skills.length)
+            .toBe(2);
+    })
+
+    it("initializes the errors", async () => {
+        expect(wrapper.vm.newTeammate.errors.length)
+            .toBe(0);
+        expect(wrapper.vm.errorLoadingTeammates)
+            .toBeFalsy();
+        expect(wrapper.vm.errorDeletingTeammate)
+            .toBeFalsy();
+    })
+
+})
 
 describe("The teammates are loaded and the view is updated correctly", () => {
 
@@ -307,7 +331,7 @@ describe("The teammate is deleted correctly", () => {
     });
 
     it("delete the teammate", async () => {
-        const teammateToDelete = wrapper.vm.teammates[0].id;
+        const teammateToDelete = wrapper.vm.teammates[1].id;
 
         wrapper.findAllComponents(Card).wrappers[0]
             .vm.$emit("delete", teammateToDelete);
@@ -535,7 +559,7 @@ describe('the teammate is inserted and the view is updated', () => {
             skills: newTeammate.skills
         }
 
-        wrapper.vm.insertTeammate()
+        wrapper.vm.insertTeammate();
         await flushPromises();
 
         expect(wrapper.vm.$data.teammates)
@@ -547,7 +571,7 @@ describe('the teammate is inserted and the view is updated', () => {
     })
 
     it('recovers the skills from the database', async () => {
-        wrapper.vm.getSkillsAndUpdateView()
+        wrapper.vm.insertTeammate();
         await flushPromises();
 
         expect(wrapper.vm.skills)
@@ -606,7 +630,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
                 role: roles.find(r => {
                     return r.id === newTeammate.role.value
                 }).name,
-                gender: newTeammate.gender.value,
+                gender: 'F',
                 photoUrl: newTeammate.photoUrl.value,
                 email: newTeammate.email.value,
                 city: newTeammate.city.value
@@ -699,7 +723,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
     it('updates the view after updating the teammate', async () => {
         const teammatesLength = wrapper.vm.teammates.length;
         const updatedTeammate = {
-            id: 1,
+            id: 2,
             name: {
                 value: 'New name'
             },
@@ -720,7 +744,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
             ],
             errors: [],
             photoUrl: {
-                value: teammates[0].personalData.photoUrl
+                value: teammates[1].personalData.photoUrl
             }
         }
         await wrapper.setData({
@@ -728,7 +752,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
         })
 
         const expectedTeammate = {
-            id: 1,
+            id: 2,
             personalData: {
                 name: updatedTeammate.name.value,
                 role: wrapper.vm.roles.find(r => {
@@ -753,7 +777,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
         expect(wrapper.vm.teammates)
             .toContainEqual(expectedTeammate);
         expect(wrapper.vm.teammates)
-            .toContainEqual(savedTeammate2);
+            .toContainEqual(savedTeammate1);
         expect(spyClearNewTeammate)
             .toHaveBeenCalledTimes(1);
         expect(spyGetSkillsAndUpdateView)
@@ -762,7 +786,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
 
     it('does not change the photoURL if the gender does not change', async () => {
         const updatedTeammate = {
-            id: 1,
+            id: 2,
             name: {
                 value: 'New name'
             },
@@ -792,7 +816,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
         })
 
         const expectedTeammate = {
-            id: 1,
+            id: 2,
             personalData: {
                 name: updatedTeammate.name.value,
                 role: wrapper.vm.roles.find(r => {

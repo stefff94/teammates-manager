@@ -11,5 +11,6 @@
     "clear-text",
     "html"
   ],
-  "coverageAnalysis": "off"
+  "coverageAnalysis": "off",
+  "timeoutMS": 8000
 }

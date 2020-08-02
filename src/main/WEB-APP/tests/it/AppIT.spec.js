@@ -350,6 +350,9 @@ describe("The teammate is updated after performing the edit operation", () => {
 
         multiselect.vm.$emit('tag', "newSkill");
 
+        const expectedSkills = respGetSkills;
+        expectedSkills.push({id:3, name: "newSkill"})
+
         const expectedTeammate = {
             id: 1,
             personalData: {
@@ -363,7 +366,7 @@ describe("The teammate is updated after performing the edit operation", () => {
                 email: 'NewEmail@email.it',
                 city: 'new city'
             },
-            skills: respGetSkills
+            skills: expectedSkills
         }
 
         await wrapper.vm.$nextTick();

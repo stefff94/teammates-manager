@@ -232,7 +232,12 @@
             getSkillsAndUpdateView() {
                 let self = this;
                 ApiService.getSkills()
-                    .then((response) => self.skills = response.data)
+                    .then((response) => {
+                        response.data.forEach( skill => {
+                            if( !self.skills.includes(skill) )
+                                self.skills.push(skill);
+                        })
+                    })
             },
             updateTeammate() {
                 const newTeammate = {
