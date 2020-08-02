@@ -21,9 +21,8 @@ cache:
     - src/main/WEB-APP/semantic
 
 deploy:
-  app: teammates-manager
   provider: script
-  script:  "./mvnw heroku:deploy-only"
+  script:  "./mvnw -P test-frontend clean heroku:deploy"
   api_key: $HEROKU_API_KEY
   on:
     branch: master
