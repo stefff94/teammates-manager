@@ -31,7 +31,8 @@ public class TeammateRestControllerE2E {
   private static final Logger LOGGER =
           LoggerFactory.getLogger(TeammateRestControllerE2E.class);
 
-  private final static int port = 8080;
+  private final static int port =
+          Integer.parseInt(System.getProperty("server.port", "8080"));;
 
   private final static String baseUrl = "http://localhost:" + port + "/api";
 
