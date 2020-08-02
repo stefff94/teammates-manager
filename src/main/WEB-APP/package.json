@@ -96,6 +96,9 @@
     "collectCoverageFrom": [
       "**/src/**/*.vue"
     ],
+    "coverageReporters": [
+      "lcov"
+    ],
     "testResultsProcessor": "jest-sonar-reporter"
   }
 }
