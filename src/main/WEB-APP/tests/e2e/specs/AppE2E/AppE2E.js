@@ -1,46 +1,4 @@
-import { When, Then, Before, After, And } from "cypress-cucumber-preprocessor/steps";
-
-let stefano = {
-    personalData: {
-        name: "Stefano Vannucchi",
-        role: "Student",
-        gender: "M",
-        photoUrl: "https://semantic-ui.com/images/avatar/large/steve.jpg",
-        email: "stefano.vannucchi@stud.unifi.it",
-        city: "Prato"
-    },
-    skills: [
-        { id: 1, name: "Java" },
-        { id: 2, name: "Vue js" }
-    ]
-};
-let paolo = {
-    personalData: {
-        name: "Paolo Innocenti",
-        role: "Student",
-        gender: "M",
-        photoUrl: "https://semantic-ui.com/images/avatar/large/elliot.jpg",
-        email: "paolo.innocenti@stud.unifi.it",
-        city: "Pistoia"
-    },
-    skills: [
-        { id: 1, name: "Java" },
-        { id: 2, name: "Vue js" }
-    ]
-};
-
-Before({ tags: "@initializeDB" }, () => {
-    process.env = Object.assign(process.env, { VUE_APP_BACKEND_IP: 'http://localhost:8080' });
-    let api = require('../../../../src/services/ApiService.js');
-
-    api.ApiService.insertTeammate(stefano).then(response =>
-        stefano.id = response.data.id);
-
-    api.ApiService.insertTeammate(paolo).then(response =>
-        paolo.id = response.data.id);
-
-    cy.wait(1500);
-});
+import { When, Then, After, And } from "cypress-cucumber-preprocessor/steps";
 
 When(`I visit the app root page`, () => {
     cy.visit("/");
@@ -54,30 +12,30 @@ Then(`I see it contains the teammates list`, () => {
         .should("have.length", 2);
 
     cards
-        .should("contain", stefano.personalData.name);
+        .should("contain", "Stefano");
     cards
-        .should("contain", stefano.personalData.role);
+        .should("contain", "Student");
     cards
-        .should("contain", stefano.personalData.email);
+        .should("contain", "stefano.vannucchi@stud.unifi.it");
     cards
-        .should("contain", stefano.personalData.city);
+        .should("contain", "Florence");
     cards
-        .should("contain", stefano.skills[0].name);
+        .should("contain", "Spring Boot");
     cards
-        .should("contain", stefano.skills[1].name);
+        .should("contain", "Vue js");
 
     cards
-        .should("contain", paolo.personalData.name);
+        .should("contain", "Paolo");
     cards
-        .should("contain", paolo.personalData.role);
+        .should("contain", "Student");
     cards
-        .should("contain", paolo.personalData.email);
+        .should("contain", "paolo.innocenti@stud.unifi.it");
     cards
-        .should("contain", paolo.personalData.city);
+        .should("contain", "Florence");
     cards
-        .should("contain", paolo.skills[0].name);
+        .should("contain", "Spring Boot");
     cards
-        .should("contain", paolo.skills[1].name);
+        .should("contain", "Vue js");
 });
 
 When(/^I click the teammate's "(.*?)" button$/, buttonName => {
@@ -116,6 +74,10 @@ And(/^I insert "(.*?)" in the multiselect$/, skillName => {
         .click();
 });
 
+And("I wait for a little while", () => {
+   cy.wait(1500);
+});
+
 When(/^I click on "(.*?)"$/, buttonName => {
     cy.get(".ui.button")
         .contains(buttonName)
@@ -127,13 +89,13 @@ Then("There should be a teammate card for the new teammate", () => {
         .children();
 
     cards
-        .should("contain", "Paolo");
+        .should("contain", "New");
     cards
         .should("contain", "Student");
     cards
-        .should("contain", "paolo.innocenti@stud.unifi.it");
+        .should("contain", "new@email.it");
     cards
-        .should("contain", "Florence");
+        .should("contain", "New City");
     cards
         .should("contain", "Skill");
 });
@@ -151,7 +113,7 @@ Then("There should be a teammate card with the updated teammate", () => {
     cards
         .should("contain", "Updated City");
     cards
-        .should("contain", "Java");
+        .should("contain", "Spring Boot");
     cards
         .should("contain", "Vue js");
     cards

@@ -7,12 +7,14 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.*;
 
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import it.polste.attsw.teammatesmanagerbackend.models.PersonalData;
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -23,23 +25,34 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TeammateRestControllerE2E {
 
-  private static final Logger LOGGER =
+  private static final Logger logger =
           LoggerFactory.getLogger(TeammateRestControllerE2E.class);
 
-  private final static int port =
-          Integer.parseInt(System.getProperty("server.port", "8080"));;
+  private final static int port = 8080;
 
-  private final static String baseUrl = "http://localhost:" + port + "/api";
+  private final static String baseUrl =
+          "http://localhost:" + port + "/api";
 
   @Before
   public void setup() {
     RestAssured.baseURI = baseUrl;
     RestAssured.port = port;
+  }
+
+  @AfterClass
+  public static void tearDown() {
+    Response response = request("GET", "/teammates");
+
+    List<Teammate> teammateList = Arrays.asList(
+            response.getBody().as(Teammate[].class));
+
+    teammateList.forEach(teammate ->
+            new RestTemplate()
+                    .delete(baseUrl + "/teammates/delete/" + teammate.getId()));
   }
 
   @Test
@@ -125,7 +138,7 @@ public class TeammateRestControllerE2E {
     ResponseEntity<String> answer = new RestTemplate()
             .postForEntity(baseUrl + "/teammates/new",
                     entity, String.class);
-    LOGGER.debug("answer for newTeammate: " + answer);
+    logger.debug("answer for newTeammate: " + answer);
 
     return new JSONObject(answer.getBody()).get("id").toString();
   }
