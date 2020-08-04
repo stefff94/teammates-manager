@@ -274,7 +274,7 @@
 					</includes>
 					<jdkVersion>1.8</jdkVersion>
 					<processTypes>
-						<web>java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=prod -jar target/${project.build.finalName}.jar</web>
+						<web>java $JAVA_OPTS -Dserver.port=$PORT -Dspring.profiles.active=prod -Dspring.datasource.url=$SPRING_DB_URL -jar target/${project.build.finalName}.jar</web>
 					</processTypes>
 				</configuration>
 			</plugin>
