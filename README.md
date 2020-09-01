@@ -9,6 +9,13 @@
 ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -Ptest-frontend
 ``` 
 
+## Run application locally
+###### Note: you need a running Docker installation on your machine.
+```
+sh run_locally.sh
+``` 
+
+
 ## Application screenshots
 ![Alt text](https://i.ibb.co/Vj2Dc4F/home.png "Home")
 ![Alt text](https://i.ibb.co/4RVdGD4/insert-teammate.png "Insert new teammate")
