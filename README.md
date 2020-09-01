@@ -8,3 +8,8 @@
 ```
 ./mvnw clean verify -Pjacoco && ./mvnw verify -Pe2e-backend-tests && ./mvnw verify -Ptest-frontend
 ``` 
+
+## Application screenshots
+![Alt text](https://i.ibb.co/Vj2Dc4F/home.png "Home")
+![Alt text](https://i.ibb.co/4RVdGD4/insert-teammate.png "Insert new teammate")
+![Alt text](https://i.ibb.co/nq254NQ/teammate-list.png "Teammate list")
