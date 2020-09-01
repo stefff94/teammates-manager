@@ -233,7 +233,7 @@
                 ApiService.getSkills()
                     .then((response) => {
                         response.data.forEach( skill => {
-                            if( !self.skills.includes(skill) )
+                            if( self.skills.find(s => s.id === skill.id) === undefined )
                                 self.skills.push(skill);
                         })
                     })

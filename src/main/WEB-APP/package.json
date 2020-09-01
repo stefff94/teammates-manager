@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-dev": "vue-cli-service build --mode e2e",
     "test:unit": "vue-cli-service test:unit tests/unit/*",
     "test:unit-watch": "vue-cli-service test:unit tests/unit/* --watch",
     "test:it": "vue-cli-service test:unit tests/it/*",
