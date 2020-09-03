@@ -92,7 +92,7 @@
 			java:S5122
 		</sonar.issue.ignore.multicriteria.e13.ruleKey>
 		<sonar.issue.ignore.multicriteria.e13.resourceKey>
-			**/WebConfig.java
+			**/CorsConfig.java
 		</sonar.issue.ignore.multicriteria.e13.resourceKey>
 		<!-- "Make sure that using this pseudorandom number generator is safe here." -->
 		<sonar.issue.ignore.multicriteria.randomImageSH.ruleKey>
