@@ -306,6 +306,7 @@
 							<excludes>
 								<exclude>**/*Application.*</exclude>
 								<exclude>**/*Config.*</exclude>
+								<exclude>**/*Config$*.*</exclude>
 								<exclude>**/models/*</exclude>
 							</excludes>
 						</configuration>
