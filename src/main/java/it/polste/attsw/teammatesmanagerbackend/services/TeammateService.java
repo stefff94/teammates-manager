@@ -85,6 +85,7 @@ public class TeammateService {
 
     if (teammate.isPresent()) {
       teammateRepository.deleteById(id);
+      skillService.removeOrphanSkills();
     } else {
       String message = "No Teammate with id " + id + " exists!";
       throw new TeammateNotExistsException(message);
