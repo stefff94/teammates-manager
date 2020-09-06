@@ -147,6 +147,20 @@ public class TeammateServiceTest {
   }
 
   @Test
+  public void deleteTeammateShouldRemoveAlsoOrphanSkills() {
+    Teammate teammate = new Teammate(1L, personalData1, savedSkills);
+
+    when(teammateRepository.findById(1L))
+            .thenReturn(Optional.of(teammate));
+
+    teammateService.deleteTeammate(1L);
+
+    verify(skillService, times(1)).removeOrphanSkills();
+
+    logger.info("Removed orphan skills after deleting teammate with id: " + teammate.getId());
+  }
+
+  @Test
   public void updateTeammateByIdReturnsUpdatedTeammateWithPreviousIdTest() {
     Teammate replacement = spy(new Teammate(null, personalData1, toSaveSkills));
     Teammate replaced = new Teammate(1L, personalData1, savedSkills);
