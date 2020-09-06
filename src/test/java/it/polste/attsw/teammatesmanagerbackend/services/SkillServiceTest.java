@@ -1,9 +1,14 @@
 package it.polste.attsw.teammatesmanagerbackend.services;
 
+import it.polste.attsw.teammatesmanagerbackend.models.PersonalData;
+import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
 import it.polste.attsw.teammatesmanagerbackend.repositories.SkillRepository;
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import static java.util.Arrays.asList;
 
 import org.junit.Test;
@@ -73,6 +78,33 @@ public class SkillServiceTest {
     Skill result = skillService.insertNewSkill(toSave);
     assertThat(result).isSameAs(saved1);
     logger.info("Returned existing skill: " + saved1.getName());
+  }
+
+  @Test
+  public void removeOrphanSkillsTest() {
+    Skill orphanSkill1 = new Skill(1L, "OrphanSkill1");
+    Skill oprhanSkill2 = new Skill(2L, "OprhanSkill2");
+
+    PersonalData personalData = new PersonalData("Stefano Vannucchi",
+            "stefano.vannucchi@stud.unifi.it",
+            "M", "Prato",
+            "Student", "photoUrl");
+
+    Set<Teammate> teammates = new HashSet<>();
+    teammates.add(new Teammate(1L, personalData, new HashSet<>()));
+
+    Skill skill = new Skill(3L, "NotOrphanSkill");
+    skill.setTeammates(teammates);
+
+    when(skillRepository.findAll())
+            .thenReturn(asList(orphanSkill1, oprhanSkill2, skill));
+
+    skillService.removeOrphanSkills();
+
+    verify(skillRepository, times(2))
+            .delete(any(Skill.class));
+
+    logger.info("Removed orphan skills");
   }
 
 }
