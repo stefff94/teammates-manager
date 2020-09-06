@@ -4,10 +4,13 @@ services:
   teammates-manager-db:
     image: mysql:8.0.20
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    environment: 
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_USER: attsw
-        MYSQL_PASSWORD: attsw
-        MYSQL_DATABASE: teammates-manager
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: attsw
+      MYSQL_PASSWORD: attsw
+      MYSQL_DATABASE: teammates-manager
+    volumes:
+      - ../../../workdir/db/init/:/docker-entrypoint-initdb.d/
+      - ../../../workdir/db/data/:/var/lib/mysql/
     ports:
       - 3306:3306

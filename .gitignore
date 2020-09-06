@@ -58,5 +58,5 @@ yarn-error.log*
 *.sln
 *.sw?
 
-
-
+# Docker db initialization and data storage
+/workdir
