@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -36,5 +37,14 @@ public class SkillService {
       skill.setId(null);
       return skillRepository.save(skill);
     }
+  }
+
+  @Transactional
+  public void removeOrphanSkills() {
+    skillRepository.findAll().forEach(skill -> {
+      if (skill.getTeammates().isEmpty()) {
+        skillRepository.delete(skill);
+      }
+    });
   }
 }
