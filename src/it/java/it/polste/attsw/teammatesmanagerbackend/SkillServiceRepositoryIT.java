@@ -54,13 +54,11 @@ public class SkillServiceRepositoryIT {
     await().atMost(60, SECONDS)
             .until(() -> threads.stream().noneMatch(Thread::isAlive));
 
-    returnedSkills.forEach(s -> System.out.println(s.getId() + " - " + s.getName()));
     assertThat(skillRepository.findAll().size())
             .isEqualTo(3);
     assertThat(returnedSkills.stream()
             .distinct().limit(2).count())
             .isEqualTo(1);
   }
-
 
 }

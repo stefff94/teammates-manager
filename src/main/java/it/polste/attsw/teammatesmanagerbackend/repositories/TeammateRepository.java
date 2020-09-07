@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface TeammateRepository extends JpaRepository<Teammate, Long> {
-  Optional<Teammate> findByPersonalDataEmail(String email);
+  Teammate findByPersonalDataEmailIgnoreCase(String email);
+  Optional<Teammate> findTeammateByPersonalDataEmailIgnoreCase(String email);
 }

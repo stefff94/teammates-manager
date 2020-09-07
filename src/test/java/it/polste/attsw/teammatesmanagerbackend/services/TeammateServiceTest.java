@@ -116,7 +116,7 @@ public class TeammateServiceTest {
     Teammate saved = new Teammate(1L, personalData1, savedSkills);
     Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
 
-    when(teammateRepository.findByPersonalDataEmail(toSave.getPersonalData().getEmail()))
+    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(toSave.getPersonalData().getEmail()))
             .thenReturn(Optional.of(saved));
     thrown.expect(TeammateAlreadyExistsException.class);
     thrown.expectMessage("This mail has already been associated with a Teammate");
@@ -155,7 +155,7 @@ public class TeammateServiceTest {
             .thenReturn(savedSkill);
     when(teammateRepository.findById(1L))
             .thenReturn(Optional.of(replaced));
-    when(teammateRepository.findByPersonalDataEmail(any(String.class)))
+    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(any(String.class)))
             .thenReturn(Optional.of(replaced));
     when(teammateRepository.save(any(Teammate.class)))
             .thenReturn(replaced);
@@ -188,7 +188,7 @@ public class TeammateServiceTest {
   public void updateTeammateByIdThrowsIllegalArgumentExceptionIfMailExistsForDifferentIdTest() {
     Teammate saved = new Teammate(1L, personalData1, savedSkills);
     Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
-    when(teammateRepository.findByPersonalDataEmail(saved.getPersonalData().getEmail()))
+    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(saved.getPersonalData().getEmail()))
             .thenReturn(Optional.of(saved));
 
     thrown.expect(TeammateAlreadyExistsException.class);
