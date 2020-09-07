@@ -8,16 +8,25 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.TeammateRepository;
 import it.polste.attsw.teammatesmanagerbackend.services.SkillService;
 import it.polste.attsw.teammatesmanagerbackend.services.TeammateService;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -52,8 +61,8 @@ public class TeammateServiceRepositoryIT {
 
     assertThat(teammateRepository.findById(saved.getId()))
             .isPresent();
-    assertThat(skillRepository.findAll())
-            .containsAll(skills);
+    assertThat(skillRepository.findByNameIgnoreCase("skill"))
+            .isNotNull();
   }
 
   @Test
@@ -77,6 +86,33 @@ public class TeammateServiceRepositoryIT {
     teammateService.deleteTeammate(saved.getId());
 
     assertThat(teammateRepository.findAll()).doesNotContain(saved);
+  }
+
+  @Test
+  public void insertNewTeammateConcurrentlyReturnsSameTeammateIfSameMailITTest(){
+    PersonalData personalData = new PersonalData("Mario Rossi", "mariorossi@mail.it",
+            "male", "Roma",
+            "Student", "photoUrl");
+    HashSet<Skill> skills = new HashSet<>();
+    skills.add(new Skill(1L, "skill"));
+    List<Teammate> returnedTeammates = new ArrayList<>();
+
+    List<Thread> threads = IntStream.range(0, 10)
+            .mapToObj(tId -> new Thread(
+                    () ->
+                            returnedTeammates.add(teammateService.insertNewTeammate(new Teammate(null, personalData, skills)))
+            ))
+            .peek(Thread::start)
+            .collect(Collectors.toList());
+
+    await().atMost(60, SECONDS)
+            .until(() -> threads.stream().noneMatch(Thread::isAlive));
+
+    assertThat(teammateRepository.findAll().size())
+            .isEqualTo(1);
+    assertThat(returnedTeammates.stream()
+            .distinct().limit(2).count())
+            .isEqualTo(1);
   }
 
 }

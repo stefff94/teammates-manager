@@ -5,6 +5,8 @@ import it.polste.attsw.teammatesmanagerbackend.exceptions.TeammateNotExistsExcep
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
 import it.polste.attsw.teammatesmanagerbackend.repositories.TeammateRepository;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -38,7 +40,7 @@ public class TeammateService {
   private boolean teammateMailIsDuplicate(Teammate teammate, Long id) {
     String mail = teammate.getPersonalData().getEmail();
     Optional<Teammate> existingMail =
-            teammateRepository.findByPersonalDataEmail(mail);
+            teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(mail);
 
     if (existingMail.isPresent() && existingMail.get().getId().equals(id)) {
       return false;
@@ -54,7 +56,13 @@ public class TeammateService {
             saveSkillsForTeammate(teammate.getSkills());
     teammate.setSkills(savedSkills);
 
-    return teammateRepository.save(teammate);
+    try {
+      return teammateRepository.save(teammate);
+    }catch(ConstraintViolationException | DataIntegrityViolationException e) {
+      return teammateRepository.findByPersonalDataEmailIgnoreCase(teammate
+              .getPersonalData()
+              .getEmail());
+    }
   }
 
   private Set<Skill> saveSkillsForTeammate(Set<Skill> skills) {

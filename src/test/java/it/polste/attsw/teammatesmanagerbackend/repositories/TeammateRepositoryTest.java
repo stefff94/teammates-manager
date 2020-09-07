@@ -78,7 +78,7 @@ public class TeammateRepositoryTest {
     Teammate foundTeammate = new Teammate();
 
     final Optional<Teammate> toFindTeammate = teammateRepository
-            .findByPersonalDataEmail("stefano.vannucchi@stud.unifi.it");
+            .findTeammateByPersonalDataEmailIgnoreCase("stefano.vannucchi@stud.unifi.it");
 
     if (toFindTeammate.isPresent()) {
       foundTeammate = toFindTeammate.get();
@@ -88,6 +88,19 @@ public class TeammateRepositoryTest {
 
     logger.info("Persisted and retrieved entity with email: "
             + foundTeammate.getPersonalData().getEmail());
+  }
+
+  @Test
+  public void findByPersonalDataEmailIgnoreCaseTestReturnsExistingTeammateTest(){
+    Teammate persistedTeammate = testEntityManager.persistFlushFind(teammate);
+
+    final Teammate savedTeammate = teammateRepository
+            .findByPersonalDataEmailIgnoreCase(teammate
+            .getPersonalData()
+            .getEmail());
+
+    assertThat(savedTeammate)
+            .isEqualTo(persistedTeammate);
   }
 
 }

@@ -6,6 +6,8 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.SkillRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 
@@ -23,18 +25,20 @@ public class SkillService {
   }
 
   public Skill insertNewSkill(Skill skill) {
-    List<Skill> skills = skillRepository.findAll();
+    Optional<Skill> savedSkill = skillRepository
+            .findSkillByNameIgnoreCase(skill.getName());
 
-    Optional<Skill> savedSkill = skills.stream()
-            .filter(s -> s.getName()
-                    .equalsIgnoreCase(skill.getName().toLowerCase()))
-            .findFirst();
-
-    if (savedSkill.isPresent()) {
+    if (savedSkill.isPresent())
       return savedSkill.get();
-    } else {
+    else {
       skill.setId(null);
-      return skillRepository.save(skill);
+      try {
+        return skillRepository.save(skill);
+      }catch(ConstraintViolationException | DataIntegrityViolationException e) {
+        return skillRepository
+                .findByNameIgnoreCase(skill.getName());
+      }
     }
   }
+
 }

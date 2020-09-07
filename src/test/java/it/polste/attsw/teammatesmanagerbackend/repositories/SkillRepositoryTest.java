@@ -1,6 +1,7 @@
 package it.polste.attsw.teammatesmanagerbackend.repositories;
 
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
+import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,5 +56,32 @@ public class SkillRepositoryTest {
     logger.info("Persisted and retrieved entity with id: "
             + skills.get(0).getId());
   }
+
+  @Test
+  public void skillFindByNameIgnoreCaseTest() {
+    Skill savedSkill = testEntityManager.persistFlushFind(skill);
+
+    final Skill skill = skillRepository
+            .findByNameIgnoreCase("spring boot");
+
+    assertThat(skill).isEqualTo(savedSkill);
+    logger.info("Persisted and retrieved skill with name: " + skill.getName());
+  }
+
+  @Test
+  public void findSkillByNameIgnoreCaseTest() {
+    Skill savedSkill = testEntityManager.persistFlushFind(skill);
+    Skill skill = new Skill();
+
+    final Optional<Skill> retrieveSkill = skillRepository
+            .findSkillByNameIgnoreCase("spring boot");
+
+    if(retrieveSkill.isPresent())
+      skill = retrieveSkill.get();
+
+    assertThat(skill).isEqualTo(savedSkill);
+    logger.info("Persisted and retrieved skill with name: " + skill.getName());
+  }
+
 
 }
