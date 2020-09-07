@@ -60,13 +60,9 @@ public class SkillRepositoryTest {
   @Test
   public void findSkillByNameTest() {
     Skill savedSkill = testEntityManager.persistFlushFind(skill);
-    Skill skill = new Skill();
 
-    final Optional<Skill> retrieveSkill = skillRepository
+    final Skill skill = skillRepository
             .findByNameIgnoreCase("spring boot");
-    if (retrieveSkill.isPresent()) {
-      skill = retrieveSkill.get();
-    }
 
     assertThat(skill).isEqualTo(savedSkill);
     logger.info("Persisted and retrieved skill with name: " + skill.getName());

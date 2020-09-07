@@ -6,6 +6,8 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.SkillRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 
@@ -34,7 +36,12 @@ public class SkillService {
       return savedSkill.get();
     } else {
       skill.setId(null);
-      return skillRepository.save(skill);
+      try {
+        return skillRepository.save(skill);
+      }catch(ConstraintViolationException | DataIntegrityViolationException e){
+        return skillRepository
+                .findByNameIgnoreCase(skill.getName());
+      }
     }
   }
 }
