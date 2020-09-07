@@ -4,6 +4,8 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.SkillRepository;
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 
 import java.util.List;
+import java.util.Optional;
+
 import static java.util.Arrays.asList;
 
 import org.junit.Test;
@@ -67,8 +69,8 @@ public class SkillServiceTest {
     Skill saved1 = new Skill(1L, "skill1");
     Skill saved2 = new Skill(2L, "skill2");
 
-    when(skillRepository.findAll())
-            .thenReturn(asList(saved2, saved1));
+    when(skillRepository.findSkillByNameIgnoreCase(any(String.class)))
+            .thenReturn(Optional.of(saved1));
 
     Skill result = skillService.insertNewSkill(toSave);
     assertThat(result).isSameAs(saved1);

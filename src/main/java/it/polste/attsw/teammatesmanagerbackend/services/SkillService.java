@@ -25,23 +25,20 @@ public class SkillService {
   }
 
   public Skill insertNewSkill(Skill skill) {
-    List<Skill> skills = skillRepository.findAll();
+    Optional<Skill> savedSkill = skillRepository
+            .findSkillByNameIgnoreCase(skill.getName());
 
-    Optional<Skill> savedSkill = skills.stream()
-            .filter(s -> s.getName()
-                    .equalsIgnoreCase(skill.getName().toLowerCase()))
-            .findFirst();
-
-    if (savedSkill.isPresent()) {
+    if (savedSkill.isPresent())
       return savedSkill.get();
-    } else {
+    else {
       skill.setId(null);
       try {
         return skillRepository.save(skill);
-      }catch(ConstraintViolationException | DataIntegrityViolationException e){
+      }catch(ConstraintViolationException | DataIntegrityViolationException e) {
         return skillRepository
                 .findByNameIgnoreCase(skill.getName());
       }
     }
   }
+
 }
