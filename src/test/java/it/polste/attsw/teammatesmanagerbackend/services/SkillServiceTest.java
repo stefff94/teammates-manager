@@ -1,13 +1,16 @@
 package it.polste.attsw.teammatesmanagerbackend.services;
 
+import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
 import it.polste.attsw.teammatesmanagerbackend.repositories.SkillRepository;
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.*;
@@ -17,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -75,6 +80,38 @@ public class SkillServiceTest {
     Skill result = skillService.insertNewSkill(toSave);
     assertThat(result).isSameAs(saved1);
     logger.info("Returned existing skill: " + saved1.getName());
+  }
+
+  @Test
+  public void insertNewSkillReturnsExistingSkillIfCalledConcurrentlyWithDataIntegrityViolationExceptionTest(){
+    Skill toSave = new Skill(999L, "skill");
+    Skill saved = new Skill(1L, "skill");
+
+    when(skillRepository.save(any(Skill.class)))
+            .thenThrow(DataIntegrityViolationException.class);
+    when(skillRepository.findByNameIgnoreCase(any(String.class)))
+            .thenReturn(saved);
+
+    Skill skill = skillService.insertNewSkill(toSave);
+
+    assertThat(skill)
+            .isEqualTo(saved);
+  }
+
+  @Test
+  public void insertNewSkillReturnsExistingSkillIfCalledConcurrentlyWithConstraintViolationExceptionTest(){
+    Skill toSave = new Skill(999L, "skill");
+    Skill saved = new Skill(1L, "skill");
+
+    when(skillRepository.save(any(Skill.class)))
+            .thenThrow(ConstraintViolationException.class);
+    when(skillRepository.findByNameIgnoreCase(any(String.class)))
+            .thenReturn(saved);
+
+    Skill skill = skillService.insertNewSkill(toSave);
+
+    assertThat(skill)
+            .isEqualTo(saved);
   }
 
 }
