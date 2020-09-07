@@ -58,7 +58,7 @@ public class SkillRepositoryTest {
   }
 
   @Test
-  public void findSkillByNameTest() {
+  public void skillFindByNameIgnoreCaseTest() {
     Skill savedSkill = testEntityManager.persistFlushFind(skill);
 
     final Skill skill = skillRepository
@@ -67,5 +67,21 @@ public class SkillRepositoryTest {
     assertThat(skill).isEqualTo(savedSkill);
     logger.info("Persisted and retrieved skill with name: " + skill.getName());
   }
+
+  @Test
+  public void findSkillByNameIgnoreCaseTest() {
+    Skill savedSkill = testEntityManager.persistFlushFind(skill);
+    Skill skill = new Skill();
+
+    final Optional<Skill> retrieveSkill = skillRepository
+            .findSkillByNameIgnoreCase("spring boot");
+
+    if(retrieveSkill.isPresent())
+      skill = retrieveSkill.get();
+
+    assertThat(skill).isEqualTo(savedSkill);
+    logger.info("Persisted and retrieved skill with name: " + skill.getName());
+  }
+
 
 }
