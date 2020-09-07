@@ -41,12 +41,11 @@ public class SkillServiceRepositoryIT {
 
   @Test
   public void insertNewSkillConcurrentlyReturnsSameSkillITTest(){
-    Skill skill = new Skill(999L, "Skill");
     List<Skill> returnedSkills = new ArrayList<>();
     List<Thread> threads = IntStream.range(0, 10)
             .mapToObj(tId -> new Thread(
                     () ->
-                            returnedSkills.add(skillService.insertNewSkill(skill))
+                            returnedSkills.add(skillService.insertNewSkill(new Skill(999L, "Skill")))
             ))
             .peek(Thread::start)
             .collect(Collectors.toList());

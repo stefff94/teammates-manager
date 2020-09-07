@@ -8,6 +8,7 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.TeammateRepository;
 import it.polste.attsw.teammatesmanagerbackend.services.SkillService;
 import it.polste.attsw.teammatesmanagerbackend.services.TeammateService;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,8 +61,8 @@ public class TeammateServiceRepositoryIT {
 
     assertThat(teammateRepository.findById(saved.getId()))
             .isPresent();
-    assertThat(skillRepository.findAll())
-            .containsAll(skills);
+    assertThat(skillRepository.findByNameIgnoreCase("skill"))
+            .isNotNull();
   }
 
   @Test
@@ -89,12 +90,17 @@ public class TeammateServiceRepositoryIT {
 
   @Test
   public void insertNewTeammateConcurrentlyReturnsSameTeammateIfSameMailITTest(){
-    Teammate teammate = new Teammate(null, personalData, skills);
+    PersonalData personalData = new PersonalData("Mario Rossi", "mariorossi@mail.it",
+            "male", "Roma",
+            "Student", "photoUrl");
+    HashSet<Skill> skills = new HashSet<>();
+    skills.add(new Skill(1L, "skill"));
     List<Teammate> returnedTeammates = new ArrayList<>();
+
     List<Thread> threads = IntStream.range(0, 10)
             .mapToObj(tId -> new Thread(
                     () ->
-                            returnedTeammates.add(teammateService.insertNewTeammate(teammate))
+                            returnedTeammates.add(teammateService.insertNewTeammate(new Teammate(null, personalData, skills)))
             ))
             .peek(Thread::start)
             .collect(Collectors.toList());
