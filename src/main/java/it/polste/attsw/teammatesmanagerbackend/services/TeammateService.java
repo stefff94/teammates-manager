@@ -44,11 +44,7 @@ public class TeammateService {
     Optional<Teammate> existingMail =
             teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(mail);
 
-    if (existingMail.isPresent() && existingMail.get().getId().equals(id)) {
-      return false;
-    } else {
-      return existingMail.isPresent();
-    }
+    return existingMail.isPresent() && !existingMail.get().getId().equals(id);
   }
 
   private Teammate setTeammateData(Long id, Teammate teammate) {
@@ -74,6 +70,7 @@ public class TeammateService {
     return teammateSkills;
   }
 
+  @Transactional
   public Teammate updateTeammate(Long id, Teammate teammate) {
     if (teammateMailIsDuplicate(teammate, id)) {
       String message = "This mail has already been associated with a Teammate";
