@@ -91,33 +91,42 @@ public class TeammateServiceRepositoryIT {
 
   @Test
   public void insertNewTeammateConcurrentlyThrowsTeammateAlreadyExistsExceptionIfSameMailITTest(){
-    PersonalData personalData = new PersonalData("Mario Rossi", "mariorossi@mail.it",
-            "male", "Roma",
-            "Student", "photoUrl");
-    HashSet<Skill> skills = new HashSet<>();
-    skills.add(new Skill(1L, "skill"));
     List<Teammate> returnedTeammates = new ArrayList<>();
+    int expectedSkillAmount = skillRepository.findAll().size() + 1;
+    PersonalData personalData = new PersonalData("Mario Rossi",
+            "mariorossi@mail.it",
+            "male",
+            "Roma",
+            "Student",
+            "photoUrl");
 
     try {
       List<Thread> threads = IntStream.range(0, 10)
               .mapToObj(tId -> new Thread(
-                      () ->
-                              returnedTeammates.add(teammateService
-                                      .insertNewTeammate(
-                                              new Teammate(null, personalData, skills)))
+                      () -> {
+                        HashSet<Skill> skills = new HashSet<>();
+                        skills.add(new Skill(null, "skill" + tId));
+                        returnedTeammates.add(teammateService
+                                .insertNewTeammate(
+                                        new Teammate(null, personalData, skills)));
+                      }
               ))
               .peek(Thread::start)
               .collect(Collectors.toList());
 
       await().atMost(60, SECONDS)
               .until(() -> threads.stream().noneMatch(Thread::isAlive));
-      fail("insertNewTeammate did not fail");
+      fail("insertNewTeammate failed," +
+              " it did not throw TeammateAlreadyExistException when expected");
+
     }catch(TeammateAlreadyExistsException e){
       assertThat(teammateRepository.findAll().size())
               .isEqualTo(1);
       assertThat(returnedTeammates.stream()
               .distinct().limit(2).count())
               .isEqualTo(1);
+      assertThat(skillRepository.findAll().size())
+              .isEqualTo(expectedSkillAmount);
     }
   }
 

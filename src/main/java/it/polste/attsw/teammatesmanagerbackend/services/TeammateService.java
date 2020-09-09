@@ -8,6 +8,7 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.TeammateRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -28,6 +29,7 @@ public class TeammateService {
     return teammateRepository.findAll();
   }
 
+  @Transactional
   public Teammate insertNewTeammate(Teammate teammate) {
     if (!teammateMailIsDuplicate(teammate, null)) {
       return setTeammateData(null, teammate);
@@ -56,11 +58,11 @@ public class TeammateService {
             saveSkillsForTeammate(teammate.getSkills());
     teammate.setSkills(savedSkills);
 
-    try {
+    try{
       return teammateRepository.save(teammate);
-    }catch(ConstraintViolationException | DataIntegrityViolationException e) {
-      String message = "Can not create a teammate with an already used emaila";
-      throw new TeammateAlreadyExistsException(message);
+    }catch(ConstraintViolationException | DataIntegrityViolationException e){
+      String message = "Can not assign an already used email";
+     throw new TeammateAlreadyExistsException(message);
     }
   }
 
@@ -96,6 +98,6 @@ public class TeammateService {
       String message = "No Teammate with id " + id + " exists!";
       throw new TeammateNotExistsException(message);
     }
-
   }
+
 }
