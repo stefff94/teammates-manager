@@ -1,5 +1,6 @@
 package it.polste.attsw.teammatesmanagerbackend;
 
+import it.polste.attsw.teammatesmanagerbackend.exceptions.TeammateAlreadyExistsException;
 import it.polste.attsw.teammatesmanagerbackend.models.PersonalData;
 import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
@@ -8,13 +9,13 @@ import it.polste.attsw.teammatesmanagerbackend.repositories.TeammateRepository;
 import it.polste.attsw.teammatesmanagerbackend.services.SkillService;
 import it.polste.attsw.teammatesmanagerbackend.services.TeammateService;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.awaitility.Awaitility.await;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class TeammateServiceRepositoryIT {
   }
 
   @Test
-  public void insertNewTeammateConcurrentlyReturnsSameTeammateIfSameMailITTest(){
+  public void insertNewTeammateConcurrentlyThrowsTeammateAlreadyExistsExceptionIfSameMailITTest(){
     PersonalData personalData = new PersonalData("Mario Rossi", "mariorossi@mail.it",
             "male", "Roma",
             "Student", "photoUrl");
@@ -97,22 +98,27 @@ public class TeammateServiceRepositoryIT {
     skills.add(new Skill(1L, "skill"));
     List<Teammate> returnedTeammates = new ArrayList<>();
 
-    List<Thread> threads = IntStream.range(0, 10)
-            .mapToObj(tId -> new Thread(
-                    () ->
-                            returnedTeammates.add(teammateService.insertNewTeammate(new Teammate(null, personalData, skills)))
-            ))
-            .peek(Thread::start)
-            .collect(Collectors.toList());
+    try {
+      List<Thread> threads = IntStream.range(0, 10)
+              .mapToObj(tId -> new Thread(
+                      () ->
+                              returnedTeammates.add(teammateService
+                                      .insertNewTeammate(
+                                              new Teammate(null, personalData, skills)))
+              ))
+              .peek(Thread::start)
+              .collect(Collectors.toList());
 
-    await().atMost(60, SECONDS)
-            .until(() -> threads.stream().noneMatch(Thread::isAlive));
-
-    assertThat(teammateRepository.findAll().size())
-            .isEqualTo(1);
-    assertThat(returnedTeammates.stream()
-            .distinct().limit(2).count())
-            .isEqualTo(1);
+      await().atMost(60, SECONDS)
+              .until(() -> threads.stream().noneMatch(Thread::isAlive));
+      fail("insertNewTeammate did not fail");
+    }catch(TeammateAlreadyExistsException e){
+      assertThat(teammateRepository.findAll().size())
+              .isEqualTo(1);
+      assertThat(returnedTeammates.stream()
+              .distinct().limit(2).count())
+              .isEqualTo(1);
+    }
   }
 
 }
