@@ -228,4 +228,16 @@ public class TeammateServiceTest {
             .isEqualTo(saved);
   }
 
+  @Test
+  public void insertNewTeammateThrowsExceptionWhenSaveFailsTest(){
+    Teammate toSave = new Teammate(999L, personalData1, savedSkills);
+
+    doThrow(new DataIntegrityViolationException("msg"))
+            .when(teammateRepository).save(any(Teammate.class));
+    thrown.expect(TeammateAlreadyExistsException.class);
+    thrown.expectMessage("Can not create a teammate with an already used email");
+
+    teammateService.insertNewTeammate(toSave);
+  }
+
 }

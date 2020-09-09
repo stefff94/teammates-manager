@@ -59,9 +59,8 @@ public class TeammateService {
     try {
       return teammateRepository.save(teammate);
     }catch(ConstraintViolationException | DataIntegrityViolationException e) {
-      return teammateRepository.findByPersonalDataEmailIgnoreCase(teammate
-              .getPersonalData()
-              .getEmail());
+      String message = "Can not create a teammate with an already used emaila";
+      throw new TeammateAlreadyExistsException(message);
     }
   }
 
