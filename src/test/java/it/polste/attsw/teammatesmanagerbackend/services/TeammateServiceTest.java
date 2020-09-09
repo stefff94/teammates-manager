@@ -11,7 +11,6 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -154,8 +153,6 @@ public class TeammateServiceTest {
             .thenReturn(savedSkill);
     when(teammateRepository.findById(1L))
             .thenReturn(Optional.of(replaced));
-    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(any(String.class)))
-            .thenReturn(Optional.of(replaced));
     when(teammateRepository.save(any(Teammate.class)))
             .thenReturn(replaced);
 
@@ -197,45 +194,13 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void insertNewTeammateReturnsExistingTeammateIfCalledConcurrentlyWithDataIntegrityViolationExceptionTest(){
-    Teammate toSave = new Teammate(999L, personalData1, savedSkills);
-    Teammate saved = new Teammate(1L, personalData1, savedSkills);
-
-    when(teammateRepository.save(any(Teammate.class)))
-            .thenThrow(DataIntegrityViolationException.class);
-    when(teammateRepository.findByPersonalDataEmailIgnoreCase(any(String.class)))
-            .thenReturn(saved);
-
-    Teammate teammate = teammateService.insertNewTeammate(toSave);
-
-    assertThat(teammate)
-            .isEqualTo(saved);
-  }
-
-  @Test
-  public void insertNewTeammateReturnsExistingTeammateIfCalledConcurrentlyWithConstraintViolationExceptionTest(){
-    Teammate toSave = new Teammate(999L, personalData1, savedSkills);
-    Teammate saved = new Teammate(1L, personalData1, savedSkills);
-
-    when(teammateRepository.save(any(Teammate.class)))
-            .thenThrow(ConstraintViolationException.class);
-    when(teammateRepository.findByPersonalDataEmailIgnoreCase(any(String.class)))
-            .thenReturn(saved);
-
-    Teammate teammate = teammateService.insertNewTeammate(toSave);
-
-    assertThat(teammate)
-            .isEqualTo(saved);
-  }
-
-  @Test
   public void insertNewTeammateThrowsExceptionWhenSaveFailsTest(){
     Teammate toSave = new Teammate(999L, personalData1, savedSkills);
 
     doThrow(new DataIntegrityViolationException("msg"))
             .when(teammateRepository).save(any(Teammate.class));
     thrown.expect(TeammateAlreadyExistsException.class);
-    thrown.expectMessage("Can not create a teammate with an already used email");
+    thrown.expectMessage("Can not assign an already used email");
 
     teammateService.insertNewTeammate(toSave);
   }
