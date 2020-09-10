@@ -11,7 +11,6 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -152,9 +151,9 @@ public class TeammateServiceTest {
 
     when(skillService.insertNewSkill(any(Skill.class)))
             .thenReturn(savedSkill);
-    when(teammateRepository.findById(1L))
-            .thenReturn(Optional.of(replaced));
     when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(any(String.class)))
+            .thenReturn(Optional.of(replaced));
+    when(teammateRepository.findById(1L))
             .thenReturn(Optional.of(replaced));
     when(teammateRepository.save(any(Teammate.class)))
             .thenReturn(replaced);
@@ -172,7 +171,7 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void updateTeammateByIdThrowsIllegalArgumentExceptionIfTeammateIsMissingTest() {
+  public void updateTeammateByIdThrowsTeammateNotExistsExceptionIfTeammateIsMissingTest() {
     Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
     when(teammateRepository.findById(any(Long.class)))
             .thenReturn(Optional.empty());
@@ -184,9 +183,9 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void updateTeammateByIdThrowsIllegalArgumentExceptionIfMailExistsForDifferentIdTest() {
+  public void updateTeammateByIdThrowsTeammateAlreadyExistsExceptionIfMailExistsForDifferentIdTest() {
     Teammate saved = new Teammate(1L, personalData1, savedSkills);
-    Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
+    Teammate toSave = new Teammate(2L, personalData1, toSaveSkills);
     when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(saved.getPersonalData().getEmail()))
             .thenReturn(Optional.of(saved));
 
@@ -197,35 +196,15 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void insertNewTeammateReturnsExistingTeammateIfCalledConcurrentlyWithDataIntegrityViolationExceptionTest(){
+  public void insertNewTeammateThrowsExceptionWhenSaveFailsTest(){
     Teammate toSave = new Teammate(999L, personalData1, savedSkills);
-    Teammate saved = new Teammate(1L, personalData1, savedSkills);
 
-    when(teammateRepository.save(any(Teammate.class)))
-            .thenThrow(DataIntegrityViolationException.class);
-    when(teammateRepository.findByPersonalDataEmailIgnoreCase(any(String.class)))
-            .thenReturn(saved);
+    doThrow(new DataIntegrityViolationException("msg"))
+            .when(teammateRepository).save(any(Teammate.class));
+    thrown.expect(TeammateAlreadyExistsException.class);
+    thrown.expectMessage("Can not assign an already used email");
 
-    Teammate teammate = teammateService.insertNewTeammate(toSave);
-
-    assertThat(teammate)
-            .isEqualTo(saved);
-  }
-
-  @Test
-  public void insertNewTeammateReturnsExistingTeammateIfCalledConcurrentlyWithConstraintViolationExceptionTest(){
-    Teammate toSave = new Teammate(999L, personalData1, savedSkills);
-    Teammate saved = new Teammate(1L, personalData1, savedSkills);
-
-    when(teammateRepository.save(any(Teammate.class)))
-            .thenThrow(ConstraintViolationException.class);
-    when(teammateRepository.findByPersonalDataEmailIgnoreCase(any(String.class)))
-            .thenReturn(saved);
-
-    Teammate teammate = teammateService.insertNewTeammate(toSave);
-
-    assertThat(teammate)
-            .isEqualTo(saved);
+    teammateService.insertNewTeammate(toSave);
   }
 
 }
