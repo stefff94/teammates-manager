@@ -73,7 +73,9 @@ public class TeammateService {
 
     Optional<Teammate> existingTeammate = teammateRepository.findById(id);
     if (existingTeammate.isPresent()) {
-      return setTeammateData(id, teammate);
+      Teammate result = setTeammateData(id, teammate);
+      skillService.removeOrphanSkills();
+      return result;
     } else {
       String message = "No Teammate with id " + id + " exists!";
       throw new TeammateNotExistsException(message);
