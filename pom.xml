@@ -27,6 +27,7 @@
 		<pitest.version>1.5.2</pitest.version>
 		<frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
 		<node.version>v12.16.3</node.version>
+		<awaitility.version>3.0.0</awaitility.version>
 
 		<sonar.testExecutionReportPaths>
 			${basedir}/src/main/WEB-APP/test-report.xml
@@ -166,6 +167,12 @@
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>spring-mock-mvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<version>${awaitility.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

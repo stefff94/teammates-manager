@@ -7,10 +7,7 @@ import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 import it.polste.attsw.teammatesmanagerbackend.models.Teammate;
 import it.polste.attsw.teammatesmanagerbackend.repositories.TeammateRepository;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -29,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -116,7 +114,7 @@ public class TeammateServiceTest {
     Teammate saved = new Teammate(1L, personalData1, savedSkills);
     Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
 
-    when(teammateRepository.findByPersonalDataEmail(toSave.getPersonalData().getEmail()))
+    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(toSave.getPersonalData().getEmail()))
             .thenReturn(Optional.of(saved));
     thrown.expect(TeammateAlreadyExistsException.class);
     thrown.expectMessage("This mail has already been associated with a Teammate");
@@ -158,9 +156,9 @@ public class TeammateServiceTest {
 
     when(skillService.insertNewSkill(any(Skill.class)))
             .thenReturn(savedSkill);
-    when(teammateRepository.findById(1L))
+    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(any(String.class)))
             .thenReturn(Optional.of(replaced));
-    when(teammateRepository.findByPersonalDataEmail(any(String.class)))
+    when(teammateRepository.findById(1L))
             .thenReturn(Optional.of(replaced));
     when(teammateRepository.save(any(Teammate.class)))
             .thenReturn(replaced);
@@ -180,7 +178,7 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void updateTeammateByIdThrowsIllegalArgumentExceptionIfTeammateIsMissingTest() {
+  public void updateTeammateByIdThrowsTeammateNotExistsExceptionIfTeammateIsMissingTest() {
     Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
     when(teammateRepository.findById(any(Long.class)))
             .thenReturn(Optional.empty());
@@ -192,10 +190,10 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void updateTeammateByIdThrowsIllegalArgumentExceptionIfMailExistsForDifferentIdTest() {
+  public void updateTeammateByIdThrowsTeammateAlreadyExistsExceptionIfMailExistsForDifferentIdTest() {
     Teammate saved = new Teammate(1L, personalData1, savedSkills);
-    Teammate toSave = new Teammate(999L, personalData1, toSaveSkills);
-    when(teammateRepository.findByPersonalDataEmail(saved.getPersonalData().getEmail()))
+    Teammate toSave = new Teammate(2L, personalData1, toSaveSkills);
+    when(teammateRepository.findTeammateByPersonalDataEmailIgnoreCase(saved.getPersonalData().getEmail()))
             .thenReturn(Optional.of(saved));
 
     thrown.expect(TeammateAlreadyExistsException.class);
@@ -203,4 +201,17 @@ public class TeammateServiceTest {
 
     teammateService.updateTeammate(2L, toSave);
   }
+
+  @Test
+  public void insertNewTeammateThrowsExceptionWhenSaveFailsTest(){
+    Teammate toSave = new Teammate(999L, personalData1, savedSkills);
+
+    doThrow(new DataIntegrityViolationException("msg"))
+            .when(teammateRepository).save(any(Teammate.class));
+    thrown.expect(TeammateAlreadyExistsException.class);
+    thrown.expectMessage("Can not assign an already used email");
+
+    teammateService.insertNewTeammate(toSave);
+  }
+
 }

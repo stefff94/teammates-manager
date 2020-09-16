@@ -1,6 +1,8 @@
 package it.polste.attsw.teammatesmanagerbackend.models;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.PersistenceException;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +27,9 @@ public class SkillJpaTest {
 
   @Autowired
   private TestEntityManager entityManager;
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void testJpaMapping() {
@@ -49,6 +56,25 @@ public class SkillJpaTest {
     assertThat(skill.getTeammates()).isEqualTo(teammates);
 
     logger.info("Persisted entity with id: " + skill.getId());
+  }
+
+  @Test
+  public void skillNameIsUniqueTest() {
+    PersonalData personalDataCopy = new PersonalData("Mario Rossi",
+            "mariorossi@mail.it",
+            "M",
+            "Roma",
+            "student",
+            "https://semantic-ui.com/images/avatar/large/elliot.jpg");
+
+    Skill skill =
+            entityManager.persistFlushFind(new Skill(null, "skill"));
+
+    logger.info("Persisted skill with id:" + skill.getId());
+
+    thrown.expect(PersistenceException.class);
+    thrown.expectMessage("could not execute statement");
+    entityManager.persist(new Skill(null, "skill"));
   }
 
 }

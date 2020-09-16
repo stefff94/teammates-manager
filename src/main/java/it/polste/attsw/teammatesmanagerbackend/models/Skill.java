@@ -15,6 +15,7 @@ public class Skill {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(unique = true, length = 30)
   private String name;
 
   @ManyToMany(mappedBy = "skills")
