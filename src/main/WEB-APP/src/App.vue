@@ -91,8 +91,8 @@
                     || !t.city.value;
             }
         },
-        data: function() {
-            return{
+        data() {
+            return {
                 skills: [],
                 newTeammate: {
                     id: null,
@@ -139,6 +139,7 @@
             updateViewAfterDelete(id) {
                 this.teammates.splice(
                     this.teammates.findIndex(t => t.id === id), 1);
+                this.reloadSkills();
             },
             populateNewTeammateForUpdate(id) {
                 let self = this;
@@ -226,17 +227,19 @@
             updateViewAfterInsert(newTeammate) {
                 this.teammates.push(newTeammate);
                 this.clearNewTeammate();
-                this.getSkillsAndUpdateView();
+                this.reloadSkills();
             },
             getSkillsAndUpdateView() {
                 let self = this;
                 ApiService.getSkills()
                     .then((response) => {
-                        response.data.forEach( skill => {
-                            if( self.skills.find(s => s.id === skill.id) === undefined )
-                                self.skills.push(skill);
-                        })
+                      response.data.forEach(skill =>
+                          self.skills.push(skill));
                     })
+            },
+            reloadSkills() {
+              this.skills = [];
+              this.getSkillsAndUpdateView();
             },
             updateTeammate() {
                 const newTeammate = {
@@ -269,7 +272,7 @@
                     this.teammates.find(t => t.id === newTeammate.id));
                 this.teammates[teammateIndex] = newTeammate;
                 this.clearNewTeammate();
-                this.getSkillsAndUpdateView();
+                this.reloadSkills();
             },
             clearNewTeammate() {
                 this.newTeammate.id = null;

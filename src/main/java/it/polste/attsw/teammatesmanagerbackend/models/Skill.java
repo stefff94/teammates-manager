@@ -1,10 +1,15 @@
 package it.polste.attsw.teammatesmanagerbackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "skills")
+@JsonIgnoreProperties(value= {"teammates"})
 public class Skill {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +17,9 @@ public class Skill {
 
   @Column(unique = true, length = 30)
   private String name;
+
+  @ManyToMany(mappedBy = "skills")
+  private Set<Teammate> teammates = new HashSet<>();
 
   public Skill() {}
 
@@ -34,6 +42,14 @@ public class Skill {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Set<Teammate> getTeammates() {
+    return teammates;
+  }
+
+  public void setTeammates(Set<Teammate> teammates) {
+    this.teammates = teammates;
   }
 
   @Override

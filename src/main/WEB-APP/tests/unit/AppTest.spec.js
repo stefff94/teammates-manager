@@ -6,7 +6,7 @@ import ApiService from "../../src/services/ApiService";
 import Card from "../../src/components/Card";
 import PersonalDataForm from "../../src/components/PersonalDataForm";
 import TagMultiselect from "../../src/components/TagMultiselect";
-import { avatarBaseUrl, roles } from "../../src/variables";
+import { avatarBaseUrl, roles } from "@/variables";
 
 import jQuery from 'jquery'
 import $ from 'jquery'
@@ -620,6 +620,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
     let spyApiUpdateTeammate = null;
     let spyUpdateViewAfterUpdate = null;
     let spyClearNewTeammate = null;
+    let spyReloadSkills = null;
     let spyGetSkillsAndUpdateView = null;
     let savedTeammate1 = null;
     let savedTeammate2 = null;
@@ -664,6 +665,7 @@ describe('the teammate is updated and the view is updated accordingly', () => {
         spyApiUpdateTeammate = jest.spyOn(ApiService, 'updateTeammate');
         spyUpdateViewAfterUpdate = jest.spyOn(App.methods, 'updateViewAfterUpdate');
         spyClearNewTeammate = jest.spyOn(App.methods, 'clearNewTeammate');
+        spyReloadSkills = jest.spyOn(App.methods, 'reloadSkills');
         spyGetSkillsAndUpdateView = jest.spyOn(App.methods, 'getSkillsAndUpdateView');
 
         const mockMath = Object.create(global.Math)
@@ -783,6 +785,8 @@ describe('the teammate is updated and the view is updated accordingly', () => {
         expect(wrapper.vm.teammates)
             .toContainEqual(savedTeammate1);
         expect(spyClearNewTeammate)
+            .toHaveBeenCalledTimes(1);
+        expect(spyReloadSkills)
             .toHaveBeenCalledTimes(1);
         expect(spyGetSkillsAndUpdateView)
             .toHaveBeenCalledTimes(1);

@@ -52,7 +52,7 @@ public class TeammateServiceRepositoryIT {
             "male", "city1",
             "role1", "photoUrl1");
     skills = new HashSet<>();
-    skills.add(new Skill(1L, "skill"));
+    skills.add(new Skill(null, "skill"));
   }
 
   @Test
@@ -68,16 +68,21 @@ public class TeammateServiceRepositoryIT {
 
   @Test
   public void serviceUpdatesIntoRepositoryITTest() {
+    skills.forEach(skill ->
+            skill.setId(skillRepository.save(skill).getId()));
+
     Teammate saved = teammateRepository
             .save(new Teammate(null, personalData, skills));
-    skills.add(new Skill(2L, "skills"));
+
+    skills.add(new Skill(null, "skills"));
+
     Teammate updated = teammateService.updateTeammate(saved.getId(),
             new Teammate(saved.getId(), personalData, skills));
 
     assertThat(teammateRepository.findAll())
             .contains(updated);
-    assertThat(skillRepository.findAll())
-            .containsAll(skills);
+    assertThat(updated.getSkills())
+            .isEqualTo(skills);
   }
 
   @Test

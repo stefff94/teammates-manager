@@ -123,14 +123,19 @@ public class TeammateServiceTest {
   }
 
   @Test
-  public void deleteTeammateSucceedsWithExistingTeammateTest() {
+  public void deleteTeammateSucceedsWithExistingTeammateAndAlsoRemoveOrphanSkillsTest() {
     Teammate teammate = new Teammate(1L, personalData1, savedSkills);
 
-    when(teammateRepository.findById(1L)).thenReturn(Optional.of(teammate));
+    when(teammateRepository.findById(1L))
+            .thenReturn(Optional.of(teammate));
+
     teammateService.deleteTeammate(1L);
 
     verify(teammateRepository, times(1)).deleteById(1L);
     logger.info("Deleted teammate with id: " + teammate.getId());
+
+    verify(skillService, times(1)).removeOrphanSkills();
+    logger.info("Removed orphan skills after deleting teammate with id: " + teammate.getId());
   }
 
   @Test
@@ -159,6 +164,8 @@ public class TeammateServiceTest {
             .thenReturn(replaced);
 
     Teammate result = teammateService.updateTeammate(1L, replacement);
+
+    verify(skillService, times(1)).removeOrphanSkills();
 
     assertThat(result).isSameAs(replaced);
     assertThat(replacement.getSkills()).isEqualTo(savedSkills);
