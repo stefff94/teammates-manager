@@ -167,6 +167,8 @@ public class TeammateServiceTest {
 
     Teammate result = teammateService.updateTeammate(1L, replacement);
 
+    verify(skillService, times(1)).removeOrphanSkills();
+
     assertThat(result).isSameAs(replaced);
     assertThat(replacement.getSkills()).isEqualTo(savedSkills);
 
