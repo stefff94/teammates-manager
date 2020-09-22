@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.awaitility.Awaitility.await;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -95,7 +95,7 @@ public class TeammateServiceRepositoryIT {
   }
 
   @Test
-  public void insertNewTeammateConcurrentlyThrowsTeammateAlreadyExistsExceptionIfSameMailITTest(){
+  public void insertNewTeammateConcurrentlyThrowsTeammateAlreadyExistsExceptionIfSameMailITTest() {
     List<Teammate> returnedTeammates = new ArrayList<>();
     int expectedSkillAmount = skillRepository.findAll().size() + 1;
     PersonalData personalData = new PersonalData("Mario Rossi",
@@ -105,34 +105,37 @@ public class TeammateServiceRepositoryIT {
             "Student",
             "photoUrl");
 
-    try {
-      List<Thread> threads = IntStream.range(0, 10)
-              .mapToObj(tId -> new Thread(
-                      () -> {
-                        HashSet<Skill> skills = new HashSet<>();
-                        skills.add(new Skill(null, "skill" + tId));
+    AtomicInteger exceptionsThrown = new AtomicInteger(0);
+
+    List<Thread> threads = IntStream.range(0, 10)
+            .mapToObj(tId -> new Thread(
+                    () -> {
+                      HashSet<Skill> skills = new HashSet<>();
+                      skills.add(new Skill(null, "skill" + tId));
+                      try {
                         returnedTeammates.add(teammateService
                                 .insertNewTeammate(
                                         new Teammate(null, personalData, skills)));
+                      } catch (TeammateAlreadyExistsException e) {
+                          exceptionsThrown.incrementAndGet();
                       }
-              ))
-              .peek(Thread::start)
-              .collect(Collectors.toList());
+                    }
+            ))
+            .peek(Thread::start)
+            .collect(Collectors.toList());
 
-      await().atMost(60, SECONDS)
-              .until(() -> threads.stream().noneMatch(Thread::isAlive));
-      fail("insertNewTeammate failed," +
-              " it did not throw TeammateAlreadyExistException when expected");
+    await().atMost(60, SECONDS)
+            .until(() -> threads.stream().noneMatch(Thread::isAlive));
 
-    }catch(TeammateAlreadyExistsException e){
-      assertThat(teammateRepository.findAll().size())
-              .isEqualTo(1);
-      assertThat(returnedTeammates.stream()
-              .distinct().limit(2).count())
-              .isEqualTo(1);
-      assertThat(skillRepository.findAll().size())
-              .isEqualTo(expectedSkillAmount);
-    }
+    assertThat(teammateRepository.findAll().size())
+            .isEqualTo(1);
+    assertThat(returnedTeammates.stream()
+            .distinct().limit(2).count())
+            .isEqualTo(1);
+    assertThat(skillRepository.findAll().size())
+            .isEqualTo(expectedSkillAmount);
+    assertThat(exceptionsThrown.get())
+            .isEqualTo(9);
   }
 
 }
