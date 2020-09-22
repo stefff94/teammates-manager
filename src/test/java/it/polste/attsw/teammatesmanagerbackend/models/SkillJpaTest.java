@@ -60,13 +60,6 @@ public class SkillJpaTest {
 
   @Test
   public void skillNameIsUniqueTest() {
-    PersonalData personalDataCopy = new PersonalData("Mario Rossi",
-            "mariorossi@mail.it",
-            "M",
-            "Roma",
-            "student",
-            "https://semantic-ui.com/images/avatar/large/elliot.jpg");
-
     Skill skill =
             entityManager.persistFlushFind(new Skill(null, "skill"));
 

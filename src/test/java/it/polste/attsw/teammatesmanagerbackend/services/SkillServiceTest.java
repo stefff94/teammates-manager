@@ -8,7 +8,6 @@ import it.polste.attsw.teammatesmanagerbackend.models.Skill;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Collections;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
@@ -75,7 +74,6 @@ public class SkillServiceTest {
   public void insertExistingSkillAndReturnPreviouslySavedSkillTest() {
     Skill toSave = new Skill(999L, "Skill1");
     Skill saved1 = new Skill(1L, "skill1");
-    Skill saved2 = new Skill(2L, "skill2");
 
     when(skillRepository.findSkillByNameIgnoreCase(any(String.class)))
             .thenReturn(Optional.of(saved1));
@@ -112,6 +110,7 @@ public class SkillServiceTest {
     logger.info("Removed orphan skills");
   }
 
+  @Test
   public void insertNewSkillReturnsExistingSkillIfCalledConcurrentlyWithDataIntegrityViolationExceptionTest(){
     Skill toSave = new Skill(999L, "skill");
     Skill saved = new Skill(1L, "skill");

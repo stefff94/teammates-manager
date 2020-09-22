@@ -88,6 +88,7 @@ public class TeammateService {
     }
   }
 
+  @Transactional
   public void deleteTeammate(Long id) {
     Optional<Teammate> teammate = teammateRepository.findById(id);
 

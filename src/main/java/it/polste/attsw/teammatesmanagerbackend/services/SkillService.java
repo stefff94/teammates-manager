@@ -9,8 +9,6 @@ import java.util.Optional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class SkillService {
@@ -42,7 +40,6 @@ public class SkillService {
     }
   }
 
-  @Transactional
   public void removeOrphanSkills() {
     skillRepository.findAll().forEach(skill -> {
       if (skill.getTeammates().isEmpty()) {
