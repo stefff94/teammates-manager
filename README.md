@@ -14,6 +14,9 @@
 ```
 sh run_locally.sh
 ``` 
+This script let you create the docker container for the database, and run the application. 
+If the docker container is already running, it simply detects the container ip and port, ad use these parameters 
+to setting up the application datasource.url property. After exiting, the docker container will be removed.
 
 
 ## How to use
