@@ -3,6 +3,24 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=it.polste.attsw%3Ateammates-manager&metric=alert_status)](https://sonarcloud.io/dashboard?id=it.polste.attsw%3Ateammates-manager)
 [![codecov](https://codecov.io/gh/stefff94/teammates-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/stefff94/teammates-manager)
 
+## Live Application on Heroku
+<p align="center">
+          <a href="https://teammates-manager.herokuapp.com">Teammates Manager</a>
+</p>
+
+## System Requirements
+- Java 8(or higher)
+- Docker
+
+## Maven Profiles
+` jacoco `: This profile configures the plugins required for unit and mutations tests: Maven Surefire to execute JUnit tests, PITest to execute mutation tests and JaCoCo to collect code coverage of the backend. 
+
+` e2e-backend-tests `: This profiles configures Spring Boot and Maven Failsafe for E2E tests, starting the backend, running E2E-ending tests classes and then cleaning up safely after tests are completed.  
+
+` test-frontend `: This profile enables the testing of the frontend by configuring the frontend-maven-plugin that enables binding npm-based commands to specific maven phases. More specifically, the plugin takes care of installing node and npm. Then, in the generate-resources phase, it runs `npm install`, to download all the necessary packages, and `npm run build`, to build the application. During the test phase, it runs the unit and integration tests, and finally, in the integration-test phase,it runs the e2e tests for the whole application. 
+
+` build-frontend `:This profile configures the frontend-maven-plugin in order to produce a locally-runnable version of the frontend, with the backend IP set to `http://localhost:8080`. This profile should be used only to run the application locally and not while deploying on heroku.  
+
 ## Run all the tests
 ###### Note: you need a running Docker installation on your machine.
 ```
